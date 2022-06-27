@@ -34,6 +34,10 @@ print(iris_df)
 iris_class_names = iris_df["class"]
 iris_df["class"] = label_encoder.fit_transform(iris_df["class"])
 print(iris_df)
+#
+#For exploratory Analysis of the data
+# iris_profile = pp.ProfileReport(iris_df, title="Iris Data Profile Report", explorative=True)
+# iris_profile.to_file("irisreport.html")
 
 
 # 
