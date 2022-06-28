@@ -1,5 +1,7 @@
 #Switching CPU operation instructions to AVX AVX2
 import os
+
+from sklearn.utils import shuffle
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 #Adding progression logging
 import logging
@@ -19,7 +21,7 @@ from sklearn.tree import DecisionTreeClassifier
 import matplotlib.pyplot as plt
 import pandas_profiling as pp
 
-# 
+
 # Handling the Data and Analysing it
 # 
 #Making a label encoder variable because the last column of the Iris Dataset is of the string datatype
@@ -30,26 +32,35 @@ column_names = ["sepal length","sepal width","petal length","petal width","class
 #Reading the dataset with no headers and the column names i made above as the column names
 iris_df = pd.read_csv("irisdata.csv", header=None, names=column_names)
 print(iris_df)
+
+
 #Number encoding the class (last column) so that it's a numerical representation of the 3 classes.
 iris_class_names = iris_df["class"]
 iris_df["class"] = label_encoder.fit_transform(iris_df["class"])
 print(iris_df)
-#
+
+
 #For exploratory Analysis of the data
 # iris_profile = pp.ProfileReport(iris_df, title="Iris Data Profile Report", explorative=True)
 # iris_profile.to_file("irisreport.html")
 
 
-# 
 # Handling the Model
 # 
-#Initiating the Model and creating a KFold
+# Initiating the Model and creating a KFold
 dtc = DecisionTreeClassifier(criterion="entropy")
 kf5 = StratifiedKFold(n_splits=5, shuffle=True, random_state=123)
 
+#Code for the exploratory Data Analysis of the now Kfolded Iris Dataset
+# kf5report_df = pd.DataFrame(data=iris_df)
+# kf5report_df = shuffle(kf5report_df)
+# kf5report_df.reset_index(inplace=True, drop=True)
+# iris_kfold_profile = pp.ProfileReport(kf5report_df, title="Iris KFolded Data Report", explorative=True)
+# iris_kfold_profile.to_file("iriskfoldreport.html")
+
 dfs = []
 
-#Using a for loop to run and train the model through all the folds created by kf3
+# Using a for loop to run and train the model through all the folds created by kf3
 i = 1
 for train_index, test_index in kf5.split(iris_df,iris_df["class"]):
     #Splitting the dataset
@@ -73,8 +84,8 @@ for train_index, test_index in kf5.split(iris_df,iris_df["class"]):
     
     i += 1
 
-# 
-#Plotting the data 
+
+# Plotting the data 
 #
 #Using the data and indexes derived from the Kfold with the class names Dataframe together to plot out a graph
 plt.scatter(x=y_train_labels.index,y=iris_class_names[train_index],label="train")
