@@ -49,7 +49,7 @@ print(iris_df)
 # 
 # Initiating the Model and creating a KFold
 dtc = DecisionTreeClassifier(criterion="entropy")
-kf5 = StratifiedKFold(n_splits=5, shuffle=True, random_state=123)
+iris_kfold_n5 = StratifiedKFold(n_splits=5, shuffle=True, random_state=123)
 
 #Code for the exploratory Data Analysis of the now Kfolded Iris Dataset
 # kf5report_df = pd.DataFrame(data=iris_df)
@@ -58,11 +58,11 @@ kf5 = StratifiedKFold(n_splits=5, shuffle=True, random_state=123)
 # iris_kfold_profile = pp.ProfileReport(kf5report_df, title="Iris KFolded Data Report", explorative=True)
 # iris_kfold_profile.to_file("iriskfoldreport.html")
 
-dfs = []
+occurance_df = []
 
 # Using a for loop to run and train the model through all the folds created by kf3
 i = 1
-for train_index, test_index in kf5.split(iris_df,iris_df["class"]):
+for train_index, test_index in iris_kfold_n5.split(iris_df,iris_df["class"]):
     #Splitting the dataset
     x_train = iris_df.iloc[train_index].loc[:, column_names[:4]]
     x_test = iris_df.iloc[test_index].loc[:, column_names[:4]]
@@ -80,7 +80,7 @@ for train_index, test_index in kf5.split(iris_df,iris_df["class"]):
     o_test.name = f"test {i}"
     df = pd.concat([o_train, o_test], axis=1, sort=False)
     df["|"] = "|"
-    dfs.append(df)
+    occurance_df.append(df)
     
     i += 1
 
@@ -94,4 +94,4 @@ plt.legend()
 plt.show()
 
 #Here is the number of occurances
-print(pd.concat(dfs,axis=1, sort=False))
+print(pd.concat(occurance_df,axis=1, sort=False))
