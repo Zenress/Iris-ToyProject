@@ -13,7 +13,6 @@ logging.getLogger().setLevel(logging.INFO)
 # 
 #Imports used in the Project
 import pandas as pd
-from sklearn.model_selection import KFold
 from sklearn.model_selection import StratifiedKFold
 from sklearn import preprocessing
 from sklearn import metrics
@@ -105,14 +104,10 @@ filename = 'irisdata_classification_model.sav'
 loaded_model = pickle.load(open(filename, 'rb'))
 
 
-#predict?
+# Predicting the class of the features you write. 
 unedited_input = input("Write the data you want to be predicted in the following format seperated by comma: Sepal Length, Sepal Width, Petal Length and Petal Width")
 edited_input = unedited_input.split(',')
-print(len(edited_input))
 if len(edited_input) == 4:
-    print(unedited_input)
-    for each in edited_input:
-        print(each)
     class_value = loaded_model.predict(np.reshape(edited_input,(1,4)))
     print(class_value,' = ',possible_class_names[class_value[0]])
 else:
