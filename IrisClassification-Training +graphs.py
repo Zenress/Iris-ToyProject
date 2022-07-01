@@ -58,5 +58,17 @@ for train_index, test_index in iris_kfold_n5.split(iris_df,iris_df["class"]):
 
     i += 1
 
+
+    # Plotting the data 
+    #
+    #Using the data and indexes derived from the Kfold with the class names Dataframe together to plot out a graph
+    plt.scatter(x=y_train_labels.index,y=iris_class_names[train_index],label="train")
+    plt.scatter(x=y_test_labels.index,y=iris_class_names[test_index],label="test")
+    plt.legend()
+    plt.show()
+
+#Here is the number of occurances
+print(pd.concat(occurance_df,axis=1, sort=False))
+
 filename = 'irisdata_classification_model.sav'
 pickle.dump(dtc,open(filename, 'wb'))
