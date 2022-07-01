@@ -17,7 +17,7 @@ Numpy
 
 You can remove Matplotlib and SKLearn.Metrics if you only want to run a prediction on the already trained model
 
-#Information about the files
+# Information about the files
 - The files are split into a group of 4 distinctive files all meant to serve a different purpose in the overall project. 
 - There is the DataAnalysis File which serves to show you information, correlations, maximum and minimum, distributions and so on via a profiling module. 
 There is also plenty to understand from reading the Console/Terminal printout that the file gives you
@@ -27,8 +27,3 @@ a maximum and minimum number as well as a datatype, you use it by following the 
 and things like that. The training file that has +graphs in the name is the file that prints out graphs and information about how the KFolded Dataset functions with the DecisionTreeClassifier
 
 
-How do i retrain the model?
-A: You uncomment the code from Line 66-102. This will make it retrain the model and then save. There is also some graphs that are run so you can see that the model is behaving
-
-I can't predict anything?
-A: You are probably not writing the text in the correct format. It needs to be comma seperated and it also only needs to be 4 numbers. Any more or less and it will not accept it
