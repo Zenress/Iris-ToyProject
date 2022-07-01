@@ -16,7 +16,7 @@ Pickle
 
 
 
-# Information about the files
+## Information about the files
 - The project is split into a group of 4 distinctive files all meant to serve a different purpose in the overall project. 
 - There is the DataAnalysis File which serves to show you information, correlations, maximum and minimum, distributions and so on via a profiling module. 
 There is also plenty to understand from reading the Console/Terminal printout that the file gives you
