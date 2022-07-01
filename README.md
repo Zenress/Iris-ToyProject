@@ -13,12 +13,11 @@ Pandas Profiling
 SKlearn (StratifiedKFold, Preprocessing, Metrics and DecisionTreeClassifier)
 Matplotlib Pyplot
 Pickle
-Numpy
 
-You can remove Matplotlib and SKLearn.Metrics if you only want to run a prediction on the already trained model
+
 
 # Information about the files
-- The files are split into a group of 4 distinctive files all meant to serve a different purpose in the overall project. 
+- The project is split into a group of 4 distinctive files all meant to serve a different purpose in the overall project. 
 - There is the DataAnalysis File which serves to show you information, correlations, maximum and minimum, distributions and so on via a profiling module. 
 There is also plenty to understand from reading the Console/Terminal printout that the file gives you
 - There is the Prediction file which is meant to predict on the saved training model from the Training file, it has a specific format you should write your prediction in,
