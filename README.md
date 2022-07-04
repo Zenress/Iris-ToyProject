@@ -22,6 +22,9 @@ I've learned alot about **Data analysis**, **Github repositories**, **keeping li
     - [You can use this project to do a few different things](#you-can-use-this-project-to-do-a-few-different-things)
     - [Information about the files](#information-about-the-files)
   - [Running the project](#running-the-project)
+  - [Dataset](#dataset)
+  - [Data Analysis](#data-analysis)
+    - [Some Examples of the results from the Profiling Report](#some-examples-of-the-results-from-the-profiling-report)
   - [Credits](#credits)
   - [Sources](#sources)
 
@@ -91,7 +94,7 @@ To use the project you need to choose the file best suited to what you want to d
 
 *More information about the files can be found in [Information about the files](#information-about-the-files) below this*
 
-Now that you've chosen the file you want to run you should read some information about the files in the section below. So you can get a better understanding of why they are split up and what the different files do specifically
+Now that you've chosen the file you want to run you should read some information about the files in the section below. So you can get a better understanding of why they are split up and what the different files do specifically.
 
 ### Information about the files
 
@@ -134,6 +137,52 @@ And for the last file named DataAnalytsis you can type this command:
 ```cmd:
 python source/IrisClassification-DataAnalysis.py
 ```
+
+---
+
+## Dataset
+
+The dataset used is the Iris Dataset, it's a 5 feature_column dataset that in this case was made without a Header to each column. I added headers for every Column to more easily use the data with Pandas.
+
+The dataset has 3 different classes. By default they are named:
+
+- Iris Setosa
+- Iris Versicolor
+- Iris Virginica
+
+The Headers are named:
+
+1. sepal length
+2. sepal width
+3. petal length
+4. petal width
+5. class
+
+There is a total of 150 Records.
+
+The names was derived from the documentation gathered here: <https://archive.ics.uci.edu/ml/datasets/Iris>
+
+---
+
+## Data Analysis
+
+I used some Data Analysis tools to learn more about the dataset as a whole. Pandas helped me understand how many records there was and how it was distributed in the dataset. 
+
+Pandas-profling gave me a detailed report about Correlation and Interactions, along with Maximum and Minimum ranges for each feature. This could also be done with Pandas or Scikit-Learn, but it's a lot faster to run a profiling with Pandas-profiling.
+
+### Some Examples of the results from the Profiling Report
+
+- Correlation Matrix:
+
+![Correlation Matrix](docs/READMEIrisDataReportCorrelation.png)
+
+- Interactions between Sepal Length and Petal Width:
+
+![Interactions between Sepal Length and Petal Width](docs/READMEIrisDataReportInteractionSepalLengthVSPetalWidth.png)
+
+- Interactions between Sepal Length and Sepal Width
+
+![Interactions between Sepal Length and Sepal Width](docs/READMEIrisDataReportInteractionSepalLengthSepalWidth.png)
 
 ---
 
