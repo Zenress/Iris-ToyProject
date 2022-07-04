@@ -38,28 +38,27 @@ iris_kfold_n5 = StratifiedKFold(n_splits=5, shuffle=True, random_state=123)
 
 occurance_df = []
 
-# Using a for loop to run and train the model through all the folds created by kf3
-i = 1
-for train_index, test_index in iris_kfold_n5.split(iris_df,iris_df[cfg["column_names"]["column_nr5"]]):
-    #Splitting the dataset
-    x_train = iris_df.iloc[train_index].loc[:, column_names[:4]]
-    x_test = iris_df.iloc[test_index].loc[:, column_names[:4]]
-    y_train_labels = iris_df.iloc[train_index].loc[:, cfg["column_names"]["column_nr5"]]
-    y_test_labels = iris_df.loc[test_index].loc[:, cfg["column_names"]["column_nr5"]]
+def train_model(dtc,iris_kfold_n5):
+    """_summary_
+    Train Model Function that trains a DecisionTreeClassifier using a KFolded dataset
+    
+    Args:
+        dtc (DecisionTreeClassifier): An untrained DecisionTreeClassifier used for classifying the KFolded Iris Dataset
+        iris_kfold_n5 (StratifiedKFold): A KFolded Dataset
+    """
+    i = 1
+    for train_index, test_index in iris_kfold_n5.split(iris_df,iris_df[cfg["column_names"]["column_nr5"]]):
+        #Splitting the dataset
+        x_train = iris_df.iloc[train_index].loc[:, column_names[:4]]
+        x_test = iris_df.iloc[test_index].loc[:, column_names[:4]]
+        y_train_labels = iris_df.iloc[train_index].loc[:, cfg["column_names"]["column_nr5"]]
+        y_test_labels = iris_df.loc[test_index].loc[:, cfg["column_names"]["column_nr5"]]
 
-    #Training and printing the result of each iteration
-    dtc = dtc.fit(x_train,y_train_labels)
-    print(f"Accuracy for the fold nr. {i} on the test set: {metrics.accuracy_score(y_test_labels, dtc.predict(x_test))}, doublecheck: {dtc.score(x_test,y_test_labels)}")
+        dtc = dtc.fit(x_train,y_train_labels)
+        print(f"Accuracy for the fold nr. {i} on the test set: {metrics.accuracy_score(y_test_labels, dtc.predict(x_test))}, doublecheck: {dtc.score(x_test,y_test_labels)}")
 
-    #Counting occurances
-    o_train = iris_class_names[train_index].value_counts()
-    o_train.name = f"train {i}"
-    o_test = iris_class_names[test_index].value_counts()
-    o_test.name = f"test {i}"
-    df = pd.concat([o_train, o_test], axis=1, sort=False)
-    df["|"] = "|"
-    occurance_df.append(df)
-
-    i += 1
+        i += 1
+        
+train_model(dtc,iris_kfold_n5)
 
 pickle.dump(dtc,open(cfg["file_paths"]["model_path"], 'wb'))
