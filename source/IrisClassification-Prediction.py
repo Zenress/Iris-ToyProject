@@ -1,22 +1,25 @@
 import pickle
 import numpy as np
 import yaml
-
 with open("configuration/config.yaml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-#Creating the class names in a seperate list so it can be used to tell the user which Iris it predicted
+#Creating the class names in a seperate list so it can be used to tell the user which Iris is predicted
 class_names = [cfg["class_names"]["class_nr1"],cfg["class_names"]["class_nr2"],cfg["class_names"]["class_nr3"]]
 print(class_names)
 
 #The name of the modelfile, if you change the filename in the training file you'll have to update it here as well
 #The model is loaded using pickle and the filename that you have given
-
 loaded_model = pickle.load(open(cfg["file_paths"]["model_path"], 'rb'))
 
 
 def prediction(): 
     """_summary_
+    Conditions checked for:
+    Datatype: Float
+    Length: 4 floats seperated by ,
+    Maximum: 10
+    Minimum 0.1
 
     Try:
      Checks for different input requirements
@@ -34,7 +37,7 @@ def prediction():
     try:
         for each in edited_input:
             x = float(each)
-            if float(each) > 0.1 and float(each) < 11:
+            if float(each) > 0.09 and float(each) < 11:
                 continue
             else:
                 raise ValueError()            
@@ -55,4 +58,3 @@ def prediction():
 prediction()
 
 #make the readme file better by adding setup category, run category on how to run it, table of contents, try to style documentation after importance, lists, bold, italic characters and headers and subheaders
-#Coding conventions on Comments and

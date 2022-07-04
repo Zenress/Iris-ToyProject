@@ -1,7 +1,7 @@
+import yaml
 from sklearn import preprocessing
 import pandas as pd
 import pandas_profiling as pp
-import yaml
 with open("./configuration/config.yaml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
