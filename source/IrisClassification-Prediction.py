@@ -56,6 +56,4 @@ prediction()
 
 #make the readme file better by adding setup category, run category on how to run it, table of contents, try to style documentation after importance, lists, bold, italic characters and headers and subheaders
 #Source for dataset and files, 
-#File configuration file to change values on some variables (csv name, column_names, class_names, criterion?, csv name on specific files independtedly, specific or generic determines if you should be able to change variable names)
 #Run checks on every input variable needed
-#More specific and descriptive variable names
