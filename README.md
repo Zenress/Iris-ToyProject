@@ -25,9 +25,10 @@ Pickle
 ## Installation
 
 To install this project you should run an Anaconda Prompt(cmd) in administrator mode and use the following code:
-    '''
-    conda env create -f -location of project-/iris-toyproject/configuration/irisproject_conda_env.yml
-    '''
+
+```python:
+conda env create -f -location of project-/iris-toyproject/configuration/irisproject_conda_env.yml
+```
 
 ## Running the project
 
