@@ -15,6 +15,7 @@ I've learned alot about **Data analysis**, **Github repositories**, **keeping li
   - [Table of Contents](#table-of-contents)
   - [The libraries used are](#the-libraries-used-are)
   - [Setup](#setup)
+    - [Configuration](#configuration)
     - [Installation](#installation)
     - [Uninstall](#uninstall)
   - [How to use the project](#how-to-use-the-project)
@@ -36,17 +37,28 @@ I've learned alot about **Data analysis**, **Github repositories**, **keeping li
 
 ## Setup
 
+### Configuration
+
+There is an included config.yaml file under the configuration folder. This file is where you would change different variables easily. Example:
+
+```yaml:
+class_names:
+  class_nr1: Iris Setosa
+  class_nr2: Iris Versicolor
+  class_nr3: Iris Virginica
+```
+
 ### Installation
 
-What is needed to run this project is **Anaconda** or **Miniconda**, both are *open-source* **Python Distribution Platforms**.
+What is needed to run this project is **Anaconda** or **Miniconda**, both are *open-source* **Python Distribution Platforms** along with those you also need to have Python installed.
 
 When you have Anaconda/Miniconda installed you can follow the instructions below to create an **environment** that is perfect for running the project
 
 To run this project you should create a **Conda Environment** to run it on, this will help with making sure it can run in it's default configuration. This is easily done with the included **Conda Environment** file.
 To do so, you should run an Anaconda Prompt(cmd) in administrator mode and use the following code:
 
-```python:
-conda env create -f -location of project-/iris-toyproject/configuration/irisproject_conda_env.yml
+```conda:
+conda env create -f configuration/irisproject_conda_env.yml
 ```
 
 The default name of the environment file is: **irisproject_conda_env.yml**. This could change if someone changed the name before showing you this project.
@@ -97,20 +109,31 @@ You should now head down to the [Running the project](#running-the-project) sect
 
 This section is intended to give you specific commands to run that you can easily copy paste.
 
-All of the below is done in a Anaconda Prompt Terminal
+All of the below is done in a Anaconda Prompt Terminal and it is assumed that you are running the project from it's folder.
 
-For the Prediction file you can type this command:
+For the Prediction file you can type these commands:
 
 ```cmd:
-python -Project Location-/Iris-ToyProject/source/IrisClassification-Prediction.py 
+python source/IrisClassification-Prediction.py 
 ```
 
 For the Training file without graphs you can type this command:
 
 ```cmd:
-python -Project Location-/Iris-ToyProject/source/IrisClassification-Training.py
+python source/IrisClassification-Training.py
 ```
 
+For the Training file that has graphs you can type this command:
+
+```cmd:
+python source/IrisClassification-Training +graphs.py
+```
+
+And for the last file named DataAnalytsis you can type this command:
+
+```cmd:
+python source/IrisClassification-DataAnalysis.py
+```
 
 ---
 
@@ -118,14 +141,14 @@ python -Project Location-/Iris-ToyProject/source/IrisClassification-Training.py
 
 - Credit to **UCI** for making the dataset widely accessible.
 - Credit to **Michele Stawowy** for **Quality Assurance and Guidance**
+- Credit to **Martin Riishøj Mathiasen** for the idea to **KFold the Dataset**
 
 ---
 
 ## Sources
 
 - Iris Dataset can be found here: <https://archive.ics.uci.edu/ml/datasets/Iris>
-- scikit-Learn: <https://scikit-learn.org/stable/install.html>
-- pandas: <https://pandas.pydata.org/getting_started.html>
-- pandas-profiling: <https://github.com/ydataai/pandas-profiling>
+- Reference for Folder Structure Inspiration: <https://i0.wp.com/neptune.ai/wp-content/uploads/DL-project-directory.png?resize=938%2C1024&ssl=1>
+- DecisionTreeClassifier Inspiration: <https://www.datacamp.com/tutorial/decision-tree-classification-python>
 
 ---

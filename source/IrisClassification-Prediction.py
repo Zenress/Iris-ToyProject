@@ -2,7 +2,7 @@ import pickle
 import numpy as np
 import yaml
 
-with open("./configuration/config.yaml", "r") as ymlfile:
+with open("configuration/config.yaml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
 #Creating the class names in a seperate list so it can be used to tell the user which Iris it predicted
@@ -55,5 +55,4 @@ def prediction():
 prediction()
 
 #make the readme file better by adding setup category, run category on how to run it, table of contents, try to style documentation after importance, lists, bold, italic characters and headers and subheaders
-#Source for dataset and files, 
-#Run checks on every input variable needed
+#Coding conventions on Comments and

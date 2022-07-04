@@ -9,19 +9,16 @@ from sklearn.utils import shuffle
 import matplotlib.pyplot as plt
 import pandas_profiling as pp
 import yaml
-with open("./configuration/config.yaml", "r") as ymlfile:
+with open("configuration/config.yaml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-# Handling the Data
-# 
-#Making a label encoder variable because the last column of the Iris Dataset is of the string datatype
+
 label_encoder = preprocessing.LabelEncoder()
 
-#Making column names for the dataset so it's easier to seperate different parts of the dataset
 column_names = [cfg["column_names"]["column_nr1"],cfg["column_names"]["column_nr2"]
                 ,cfg["column_names"]["column_nr3"],cfg["column_names"]["column_nr4"]
                 ,cfg["column_names"]["column_nr5"]]
-#Reading the dataset with no headers and the column names i made above as the column names
+
 iris_df = pd.read_csv(cfg["file_paths"]["dataset_path"], header=None, names=column_names)
 
 #Number encoding the class (last column) so that it's a numerical representation of the 3 classes.
