@@ -9,8 +9,6 @@ I've learned alot about **Data analysis**, **Github repositories**, **keeping li
 
 ## Table of Contents
 
----
-
 - [**Iris ToyProject**](#iris-toyproject)
   - [Table of Contents](#table-of-contents)
   - [The libraries used are](#the-libraries-used-are)
@@ -27,8 +25,6 @@ I've learned alot about **Data analysis**, **Github repositories**, **keeping li
     - [Some Examples of the results from the Profiling Report](#some-examples-of-the-results-from-the-profiling-report)
   - [Credits](#credits)
   - [Sources](#sources)
-
----
 
 ## The libraries used are
 
@@ -73,8 +69,6 @@ When you run the command above it creates a **conda environment** which can be s
 To delete the conda environment you will have to locate where the Anaconda3 folder is, by default it is under: **C:\Users\YourUserHere\Anaconda3\envs**
 
 You then delete the folder that matches the name of the Environment files configured name, by default it's name would be: **Iris_Project_Conda_Environment**
-
----
 
 ## How to use the project
 
@@ -138,8 +132,6 @@ And for the last file named DataAnalytsis you can type this command:
 python source/IrisClassification-DataAnalysis.py
 ```
 
----
-
 ## Dataset
 
 The dataset used is the Iris Dataset, it's a 5 feature_column dataset that in this case was made without a Header to each column. I added headers for every Column to more easily use the data with Pandas.
@@ -162,8 +154,6 @@ There is a total of 150 Records.
 
 The names was derived from the documentation gathered here: <https://archive.ics.uci.edu/ml/datasets/Iris>
 
----
-
 ## Data Analysis
 
 I used some Data Analysis tools to learn more about the dataset as a whole. Pandas helped me understand how many records there was and how it was distributed in the dataset. 
@@ -184,15 +174,11 @@ Pandas-profling gave me a detailed report about Correlation and Interactions, al
 
 ![Interactions between Sepal Length and Sepal Width](docs/READMEIrisDataReportInteractionSepalLengthSepalWidth.png)
 
----
-
 ## Credits
 
 - Credit to **UCI** for making the dataset widely accessible.
 - Credit to **Michele Stawowy** for **Quality Assurance and Guidance**
 - Credit to **Martin Riishøj Mathiasen** for the idea to **KFold the Dataset**
-
----
 
 ## Sources
 
