@@ -30,7 +30,7 @@ iris_df[cfg["column_names"]["column_nr5"]] = label_encoder.fit_transform(iris_df
 dtc = DecisionTreeClassifier(criterion=cfg["decisiontree_settings"]["criterion"])
 iris_kfold_n5 = StratifiedKFold(n_splits=cfg["kfold_settings"]["nr_splits"], 
                                 shuffle=cfg["kfold_settings"]["shuffle"], 
-                                random_state=cfg["kfold_settings"]["random_state"]) #Randomstate set for uniform results
+                                random_state=cfg["kfold_settings"]["random_state"])  # Randomstate for uniform results
 
 occurance_df = []
 
