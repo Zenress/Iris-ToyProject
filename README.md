@@ -57,10 +57,10 @@ To run this project you should create a **Conda Environment** to run it on, this
 To do so, you should run an Anaconda Prompt(cmd) in administrator mode and use the following code:
 
 ```conda:
-conda env create -f configuration/irisproject_conda_env.yml
+conda env create -f configuration/irisproject_conda_env.yaml
 ```
 
-The default name of the environment file is: **irisproject_conda_env.yml**. This could change if someone changed the name before showing you this project.
+The default name of the environment file is: **irisproject_conda_env.yaml**. This could change if someone changed the name before showing you this project.
 
 When you run the command above it creates a **conda environment** which can be selected as the interpretor when you run one of the python files. It cointains all the libraries you would need to run the project.
 
@@ -111,25 +111,25 @@ All of the below is done in a Anaconda Prompt Terminal and it is assumed that yo
 For the Prediction file you can type these commands:
 
 ```cmd:
-python source/IrisClassification-Prediction.py 
+python source/models/IrisClassification-Prediction.py 
 ```
 
 For the Training file without graphs you can type this command:
 
 ```cmd:
-python source/IrisClassification-Training.py
+python source/models/IrisClassification-Training.py
 ```
 
 For the Training file that has graphs you can type this command:
 
 ```cmd:
-python source/IrisClassification-Training +graphs.py
+python source/models/IrisClassification-Training +graphs.py
 ```
 
 And for the last file named DataAnalytsis you can type this command:
 
 ```cmd:
-python source/IrisClassification-DataAnalysis.py
+python source/models/IrisClassification-DataAnalysis.py
 ```
 
 ## Dataset
