@@ -35,9 +35,9 @@ def prediction():
     edited_input = unedited_input.split(',')
     
     try:
-        for each in edited_input:
-            x = float(each)
-            if float(each) > 0.09 and float(each) < 11:
+        for number in edited_input:
+            x = float(number)
+            if float(number) > 0.09 and float(number) < 11:
                 continue
             else:
                 raise ValueError()            
