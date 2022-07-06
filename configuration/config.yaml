@@ -8,14 +8,8 @@ file_paths:
   model_path: models/irisdata_classification_model.sav
   dataset_path: source/data/irisdata_raw.csv
   iris_analysis_report_path: reports/irisreport.html
-  irisshuffled_analysis_report_path: reports/shuffledirisreport.html
 
-column_names:
-  column_nr1: sepal length
-  column_nr2: sepal width
-  column_nr3: petal length
-  column_nr4: petal width
-  column_nr5: class
+column_names: ["sepal length","sepal width","petal length","petal width","class"]
 
 decisiontree_settings:
  criterion: entropy
@@ -25,6 +19,8 @@ kfold_settings:
  shuffle: True
  random_state: 123
 
-data_split_names:
- training_axis_x:
- testing_axis_x:
+#Sepal Length, Sepal Width, Petal Length, Petal Width
+input_min_values: [4.3,2,1,0.1]
+
+#Sepal Length, Sepal Width, Petal Length, Petal Width
+input_max_values: [7.9,4.4,6.9,2.5]

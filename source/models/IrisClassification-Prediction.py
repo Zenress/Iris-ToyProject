@@ -34,13 +34,14 @@ def prediction():
     unedited_input = input("Write here: ")
     edited_input = unedited_input.split(',')
     
+    i=0 
     try:
         for number in edited_input:
-            x = float(number)
-            if float(number) > 0.09 and float(number) < 11:
+            if float(number) >= cfg["input_min_values"][i] and float(number) <= cfg["input_max_values"][i]:  
+                i+=1
                 continue
             else:
-                raise ValueError()            
+                raise ValueError()
         
         if len(edited_input) == 4:
             class_value = loaded_model.predict(np.reshape(edited_input,(1,4)))
@@ -56,3 +57,16 @@ def prediction():
         prediction()
 
 prediction()
+
+#Needs an anaconda activate command explanation
+#Anaconda prompt might not be necessary, just a suggestion
+#conda environment (link to anaconda) & in sources
+#Check what is necessary for someone who knows their way around a terminal
+#Read through the readme so it's more relevant and less info dumping when unnecessary
+#Make arrays actually be arrays in yaml
+#Make as many variables redundant
+#Training split should be more flexible so it isn't a static feature selection (features  list for the x features)(label list for labels(class))
+#Translation map? Storing the encoder results to? How to go back after encoding something
+# profile reports don't need any shuffling
+# Configuration for every variable name?
+#input needs to disallow non-unicode if i have time

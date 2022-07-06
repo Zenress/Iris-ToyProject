@@ -14,17 +14,12 @@ with open("./configuration/config.yaml", "r") as ymlfile:
 
 label_encoder = preprocessing.LabelEncoder()
 
-#Column_names made to assign as headers of the dataset
-column_names = [cfg["column_names"]["column_nr1"],cfg["column_names"]["column_nr2"],
-                cfg["column_names"]["column_nr3"],cfg["column_names"]["column_nr4"],
-                cfg["column_names"]["column_nr5"]]
-
 #Assigning custom column headers while reading the csv file
-iris_df = pd.read_csv(cfg["file_paths"]["dataset_path"], header=None, names=column_names)
+iris_df = pd.read_csv(cfg["file_paths"]["dataset_path"], header=None, names=cfg["column_names"])
 
 #Encoding the last column header to an int datatype
 iris_class_names = iris_df["class"]
-iris_df[cfg["column_names"]["column_nr5"]] = label_encoder.fit_transform(iris_df[cfg["column_names"]["column_nr5"]])
+iris_df[cfg["column_names"][4]] = label_encoder.fit_transform(iris_df[cfg["column_names"][4]])
 
 
 dtc = DecisionTreeClassifier(criterion=cfg["decisiontree_settings"]["criterion"])
@@ -46,10 +41,10 @@ def train_model(dtc, iris_kfold_n5):
     """
     i = 1
     for train_index, test_index in iris_kfold_n5.split(iris_df,iris_df["class"]):
-        x_train = iris_df.iloc[train_index].loc[:, column_names[:4]]
-        x_test = iris_df.iloc[test_index].loc[:, column_names[:4]]
-        y_train_labels = iris_df.iloc[train_index].loc[:, "class"]
-        y_test_labels = iris_df.loc[test_index].loc[:, "class"]
+        x_train = iris_df.iloc[train_index].loc[:, cfg["column_names"][:4]]
+        x_test = iris_df.iloc[test_index].loc[:, cfg["column_names"][:4]]
+        y_train_labels = iris_df.iloc[train_index].loc[:, cfg["column_names"][4]]
+        y_test_labels = iris_df.loc[test_index].loc[:, cfg["column_names"][4]]
 
         dtc = dtc.fit(x_train,y_train_labels)
         print(f"Accuracy for the fold nr. {i} on the test set: {metrics.accuracy_score(y_test_labels, dtc.predict(x_test))}, doublecheck: {dtc.score(x_test,y_test_labels)}")
