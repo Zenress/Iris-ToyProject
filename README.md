@@ -1,6 +1,6 @@
 # **Iris ToyProject**
 
-This project is a **Classification model** using the **Iris Dataset**. The model used is a DecisionTree and it is made primarily using **SKlearn**
+This project is a **Classification model** using the **Iris Dataset**. The model used is a **DecisionTree** and it is made primarily using **SKlearn**
 
 This project is meant to serve as a sort of ability guaging to see what i can do without googling the solution like crazy.
 The project also helped me with building a more **team oriented** mindset and understanding of how i should **structure repositories**, **the code** and this **README file**. So that other people might be able to understand it easier
@@ -40,7 +40,7 @@ I've learned alot about **Data analysis**, **Github repositories**, **keeping li
 
 There is an included config.yaml file under the configuration folder. This file is where you would change different variables easily. Example:
 
-```yaml:
+```yaml
 class_names:
   class_nr1: Iris Setosa
   class_nr2: Iris Versicolor
@@ -49,26 +49,22 @@ class_names:
 
 ### Installation
 
-What is needed to run this project is **Anaconda** or **Miniconda**, both are *open-source* **Python Distribution Platforms** along with those you also need to have Python installed.
+To run this project you should create a **Conda Environment** (<https://www.anaconda.com/products/distribution>) to run it on, this will help with making sure it can run in it's default configuration. This is easily done with the included **Conda Environment** file.
+To do so, you should type the command:
 
-When you have Anaconda/Miniconda installed you can follow the instructions below to create an **environment** that is perfect for running the project
-
-To run this project you should create a **Conda Environment** to run it on, this will help with making sure it can run in it's default configuration. This is easily done with the included **Conda Environment** file.
-To do so, you should run an Anaconda Prompt(cmd) in administrator mode and use the following code:
-
-```conda:
+```console
 conda env create -f configuration/irisproject_conda_env.yaml
 ```
 
-The default name of the environment file is: **irisproject_conda_env.yaml**. This could change if someone changed the name before showing you this project.
+The default name of the environment file is: `irisproject_conda_env.yaml`.
 
 When you run the command above it creates a **conda environment** which can be selected as the interpretor when you run one of the python files. It cointains all the libraries you would need to run the project.
 
 ### Uninstall
 
-To delete the conda environment you will have to locate where the Anaconda3 folder is, by default it is under: **C:\Users\YourUserHere\Anaconda3\envs**
+To delete the conda environment you will have to locate where the Anaconda3 folder is, by default it is under: `C:\Users\YourUserHere\Anaconda3\envs`
 
-You then delete the folder that matches the name of the Environment files configured name, by default it's name would be: **Iris_Project_Conda_Environment**
+You then delete the folder that matches the name of the Environment files configured name, by default it's name would be: `Iris_Project_Conda_Environment`
 
 ## How to use the project
 
@@ -110,55 +106,50 @@ All of the below is done in a Anaconda Prompt Terminal and it is assumed that yo
 
 For the Prediction file you can type these commands:
 
-```cmd:
+```console
 python source/models/IrisClassification-Prediction.py 
 ```
 
 For the Training file without graphs you can type this command:
 
-```cmd:
+```console
 python source/models/IrisClassification-Training.py
 ```
 
 For the Training file that has graphs you can type this command:
 
-```cmd:
+```console
 python source/models/IrisClassification-Training +graphs.py
 ```
 
 And for the last file named DataAnalytsis you can type this command:
 
-```cmd:
+```console
 python source/models/IrisClassification-DataAnalysis.py
 ```
 
 ## Dataset
 
-The dataset used is the Iris Dataset, it's a 5 feature_column dataset that in this case was made without a Header to each column. I added headers for every Column to more easily use the data with Pandas.
+The dataset used is the Iris Dataset (<https://archive.ics.uci.edu/ml/datasets/Iris>)
 
-The dataset has 3 different classes. By default they are named:
+- 5 columns, headers added later on
+  - Sepal Length
+  - Sepal Width
+  - Petal Length
+  - Petal Width
+  - Class
+    - Iris Setosa
+    - Iris Versicolor
+    - Iris Virginica
+- 150 records
 
-- Iris Setosa
-- Iris Versicolor
-- Iris Virginica
-
-The Headers are named:
-
-1. sepal length
-2. sepal width
-3. petal length
-4. petal width
-5. class
-
-There is a total of 150 Records.
-
-The names was derived from the documentation gathered here: <https://archive.ics.uci.edu/ml/datasets/Iris>
+The names was derived from the documentation under **Attribute information** gathered here: <https://archive.ics.uci.edu/ml/datasets/Iris>
 
 ## Data Analysis
 
-I used some Data Analysis tools to learn more about the dataset as a whole. Pandas helped me understand how many records there was and how it was distributed in the dataset. 
+I used some Data Analysis tools to learn more about the dataset as a whole. Pandas helped me understand how many records there was and how it was distributed in the dataset.
 
-Pandas-profling gave me a detailed report about Correlation and Interactions, along with Maximum and Minimum ranges for each feature. This could also be done with Pandas or Scikit-Learn, but it's a lot faster to run a profiling with Pandas-profiling.
+Pandas-profling gave me a detailed report about Correlation and Interactions, along with Maximum and Minimum ranges for each feature. (`reports/irisreport.html`)
 
 ### Some Examples of the results from the Profiling Report
 
@@ -185,5 +176,6 @@ Pandas-profling gave me a detailed report about Correlation and Interactions, al
 - Iris Dataset can be found here: <https://archive.ics.uci.edu/ml/datasets/Iris>
 - Reference for Folder Structure Inspiration: <https://i0.wp.com/neptune.ai/wp-content/uploads/DL-project-directory.png?resize=938%2C1024&ssl=1>
 - DecisionTreeClassifier Inspiration: <https://www.datacamp.com/tutorial/decision-tree-classification-python>
+- Anaconda: <https://www.anaconda.com/>
 
 ---
