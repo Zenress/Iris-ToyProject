@@ -1,5 +1,5 @@
 name: Iris_Project_Conda_Environment
-#Execution code: conda env create -f configuration/irisproject_conda_env.yml
+#Execution code: conda env create -f configuration/irisproject_conda_env.yaml
 channels:
  - defaults
 
