@@ -1,13 +1,9 @@
-#Below is the configuration for the Prediction file
-class_names:
-  class_nr1: Iris Setosa
-  class_nr2: Iris Versicolor
-  class_nr3: Iris Virginica
 
 file_paths:
   model_path: models/irisdata_classification_model.sav
   dataset_path: source/data/irisdata_raw.csv
   iris_analysis_report_path: reports/irisreport.html
+  encoder_mappings: source/data/encoder_mapping.pkl
 
 column_names: ["sepal length","sepal width","petal length","petal width","class"]
 

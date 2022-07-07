@@ -17,11 +17,8 @@ label_encoder = preprocessing.LabelEncoder()
 iris_df = pd.read_csv(cfg["file_paths"]["dataset_path"], header=None, names=cfg["column_names"])
 
 #Encoding the last column header to an int datatype
-iris_class_names = iris_df["class"]
-iris_df[cfg["column_names"][4]] = label_encoder.fit_transform(iris_df[cfg["column_names"][4]])
-
-
-
+iris_df["class"] = label_encoder.fit_transform(iris_df["class"])
+iris_features = iris_df.drop(columns="class")
 
 dtc = DecisionTreeClassifier(criterion=cfg["decisiontree_settings"]["criterion"])
 iris_kfold_n5 = StratifiedKFold(n_splits=cfg["kfold_settings"]["nr_splits"], 
@@ -40,11 +37,11 @@ def train_model(dtc,iris_kfold_n5):
         iris_kfold_n5 (StratifiedKFold): A KFolded Dataset
     """
     i = 1
-    for train_index, test_index in iris_kfold_n5.split(iris_df,iris_df[cfg["column_names"][4]]):
-        x_train = iris_df.iloc[train_index].loc[:, cfg["column_names"][:4]]
-        x_test = iris_df.iloc[test_index].loc[:, cfg["column_names"][:4]]
-        y_train_labels = iris_df.iloc[train_index].loc[:, cfg["column_names"][4]]
-        y_test_labels = iris_df.loc[test_index].loc[:, cfg["column_names"][4]]
+    for train_index, test_index in iris_kfold_n5.split(iris_df,iris_df["class"]):
+        x_train = iris_features.iloc[train_index]
+        x_test = iris_features.iloc[test_index]
+        y_train_labels = iris_df["class"].iloc[train_index]
+        y_test_labels = iris_df["class"].iloc[test_index]
 
         dtc = dtc.fit(x_train,y_train_labels)
         print(f"Accuracy for the fold nr. {i} on the test set: {metrics.accuracy_score(y_test_labels, dtc.predict(x_test))}, doublecheck: {dtc.score(x_test,y_test_labels)}")
@@ -55,3 +52,7 @@ train_model(dtc,iris_kfold_n5)
 
 #Saves the file to the given path
 pickle.dump(dtc,open(cfg["file_paths"]["model_path"], 'wb'))
+
+#Saves encoder mapping to a pkl file
+encoder_mapping = dict(zip(label_encoder.classes_, range(len(label_encoder.classes_))))
+pickle.dump(encoder_mapping,open(cfg["file_paths"]["encoder_mappings"],"wb"))
