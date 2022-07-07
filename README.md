@@ -60,6 +60,12 @@ The default name of the environment file is: `irisproject_conda_env.yaml`.
 
 When you run the command above it creates a **conda environment** which can be selected as the interpretor when you run one of the python files. It cointains all the libraries you would need to run the project.
 
+After having created the environment you also have to activate it:
+
+```console
+conda activate Iris_Project_Conda_Environment
+```
+
 ### Uninstall
 
 To delete the conda environment you will have to locate where the Anaconda3 folder is, by default it is under: `C:\Users\YourUserHere\Anaconda3\envs`
@@ -102,7 +108,7 @@ You should now head down to the [Running the project](#running-the-project) sect
 
 This section is intended to give you specific commands to run that you can easily copy paste.
 
-All of the below is done in a Anaconda Prompt Terminal and it is assumed that you are running the project from it's folder.
+The commands below were run in an Anaconda prompt but it can be run in a terminal or console just fine as well.
 
 For the Prediction file you can type these commands:
 
