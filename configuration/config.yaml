@@ -5,6 +5,7 @@ file_paths:
   iris_analysis_report_path: reports/irisreport.html
   encoder_mappings: source/data/encoder_mapping.pkl
 
+label_name: 
 column_names: ["sepal length","sepal width","petal length","petal width","class"]
 
 decisiontree_settings:

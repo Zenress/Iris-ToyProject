@@ -18,8 +18,8 @@ label_encoder = preprocessing.LabelEncoder()
 iris_df = pd.read_csv(cfg["file_paths"]["dataset_path"], header=None, names=cfg["column_names"])
 print(iris_df.head(3))
 #Encoding the last column header to an int datatype
-iris_df["class"] = label_encoder.fit_transform(iris_df["class"])
-iris_features = iris_df.drop(columns="class")
+iris_df[str(cfg["label_name"])] = label_encoder.fit_transform(iris_df[str(cfg["label_name"])])
+iris_features = iris_df.drop(columns=str(cfg["label_name"]))
 print(iris_features.head(3))
 
 dtc = DecisionTreeClassifier(criterion=cfg["decisiontree_settings"]["criterion"])
@@ -40,18 +40,18 @@ def train_model(dtc, iris_kfold_n5):
         iris_kfold_n5 (StratifiedKFold): A KFolded Dataset
     """
     i = 1
-    for train_index, test_index in iris_kfold_n5.split(iris_df,iris_df["class"]):
+    for train_index, test_index in iris_kfold_n5.split(iris_df,iris_df[str(cfg["label_name"])]):
         x_train = iris_features.iloc[train_index]
         x_test = iris_features.iloc[test_index]
-        y_train_labels = iris_df["class"].iloc[train_index]
-        y_test_labels = iris_df["class"].iloc[test_index]
+        y_train_labels = iris_df[str(cfg["label_name"])].iloc[train_index]
+        y_test_labels = iris_df[str(cfg["label_name"])].iloc[test_index]
 
         dtc = dtc.fit(x_train,y_train_labels)
         print(f"Accuracy for the fold nr. {i} on the test set: {metrics.accuracy_score(y_test_labels, dtc.predict(x_test))}, doublecheck: {dtc.score(x_test,y_test_labels)}")
 
-        o_train = iris_df["class"].iloc[train_index].value_counts()
+        o_train = iris_df[str(cfg["label_name"])].iloc[train_index].value_counts()
         o_train.name = f"train {i}"
-        o_test = iris_df["class"].iloc[test_index].value_counts()
+        o_test = iris_df[str(cfg["label_name"])].iloc[test_index].value_counts()
         o_test.name = f"test {i}"
         df = pd.concat([o_train, o_test], axis=1, sort=False)
         df["|"] = "|"
@@ -59,8 +59,8 @@ def train_model(dtc, iris_kfold_n5):
 
         i += 1
 
-        plt.scatter(x=y_train_labels.index,y=iris_df["class"].iloc[train_index],label="train")
-        plt.scatter(x=y_test_labels.index,y=iris_df["class"].iloc[test_index],label="test")
+        plt.scatter(x=y_train_labels.index,y=iris_df[str(cfg["label_name"])].iloc[train_index],label="train")
+        plt.scatter(x=y_test_labels.index,y=iris_df[str(cfg["label_name"])].iloc[test_index],label="test")
         plt.legend()
         plt.show()
 

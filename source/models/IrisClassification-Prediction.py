@@ -62,3 +62,5 @@ prediction()
 #Read through the readme so it's more relevant and less info dumping when unnecessary
 #Make as many variables redundant
 #input needs to disallow non-unicode if i have time
+
+#Index of Class in column_names?
