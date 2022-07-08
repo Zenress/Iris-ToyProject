@@ -11,25 +11,26 @@ import matplotlib.pyplot as plt
 with open("./configuration/config.yaml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
+#Assigning custom column headers while reading the csv file
+dataset_df = pd.read_csv(cfg["file_paths"]["dataset_path"], header=None, names=cfg["column_names"])
+
+#Labels based on the single categorical column in the dataset
+labels = dataset_df.select_dtypes(include=['object'])
 
 label_encoder = preprocessing.LabelEncoder()
 
-#Assigning custom column headers while reading the csv file
-iris_df = pd.read_csv(cfg["file_paths"]["dataset_path"], header=None, names=cfg["column_names"])
-print(iris_df.head(3))
 #Encoding the last column header to an int datatype
-iris_df[str(cfg["label_name"])] = label_encoder.fit_transform(iris_df[str(cfg["label_name"])])
-iris_features = iris_df.drop(columns=str(cfg["label_name"]))
-print(iris_features.head(3))
+dataset_df[str(labels.columns.values[0])] = label_encoder.fit_transform(dataset_df[str(labels.columns.values[0])])
+dataset_features = dataset_df.drop(columns=labels)
 
 dtc = DecisionTreeClassifier(criterion=cfg["decisiontree_settings"]["criterion"])
-iris_kfold_n5 = StratifiedKFold(n_splits=cfg["kfold_settings"]["nr_splits"], 
+dataset_kfolded = StratifiedKFold(n_splits=cfg["kfold_settings"]["nr_splits"], 
                                 shuffle=cfg["kfold_settings"]["shuffle"], 
                                 random_state=cfg["kfold_settings"]["random_state"])  # Randomstate for uniform results
 
 occurance_df = []
 
-def train_model(dtc, iris_kfold_n5):
+def train_model(dtc, dataset_kfolded):
     """_summary_
     Train Model Function that trains a DecisionTreeClassifier using a KFolded dataset
     It splits the dataset between x and y training and testing variables
@@ -37,21 +38,21 @@ def train_model(dtc, iris_kfold_n5):
 
     Args:
         dtc (DecisionTreeClassifier): An untrained DecisionTreeClassifier used for classifying the KFolded Iris Dataset
-        iris_kfold_n5 (StratifiedKFold): A KFolded Dataset
+        dataset_kfolded (StratifiedKFold): A KFolded Dataset
     """
     i = 1
-    for train_index, test_index in iris_kfold_n5.split(iris_df,iris_df[str(cfg["label_name"])]):
-        x_train = iris_features.iloc[train_index]
-        x_test = iris_features.iloc[test_index]
-        y_train_labels = iris_df[str(cfg["label_name"])].iloc[train_index]
-        y_test_labels = iris_df[str(cfg["label_name"])].iloc[test_index]
+    for train_index, test_index in dataset_kfolded.split(dataset_df,dataset_df[str(labels.columns.values[0])]):
+        x_train = dataset_features.iloc[train_index]
+        x_test = dataset_features.iloc[test_index]
+        y_train_labels = dataset_df[str(labels.columns.values[0])].iloc[train_index]
+        y_test_labels = dataset_df[str(labels.columns.values[0])].iloc[test_index]
 
         dtc = dtc.fit(x_train,y_train_labels)
         print(f"Accuracy for the fold nr. {i} on the test set: {metrics.accuracy_score(y_test_labels, dtc.predict(x_test))}, doublecheck: {dtc.score(x_test,y_test_labels)}")
 
-        o_train = iris_df[str(cfg["label_name"])].iloc[train_index].value_counts()
+        o_train = dataset_df[str(labels.columns.values[0])].iloc[train_index].value_counts()
         o_train.name = f"train {i}"
-        o_test = iris_df[str(cfg["label_name"])].iloc[test_index].value_counts()
+        o_test = dataset_df[str(labels.columns.values[0])].iloc[test_index].value_counts()
         o_test.name = f"test {i}"
         df = pd.concat([o_train, o_test], axis=1, sort=False)
         df["|"] = "|"
@@ -59,12 +60,12 @@ def train_model(dtc, iris_kfold_n5):
 
         i += 1
 
-        plt.scatter(x=y_train_labels.index,y=iris_df[str(cfg["label_name"])].iloc[train_index],label="train")
-        plt.scatter(x=y_test_labels.index,y=iris_df[str(cfg["label_name"])].iloc[test_index],label="test")
+        plt.scatter(x=y_train_labels.index,y=dataset_df[str(labels.columns.values[0])].iloc[train_index],label="train")
+        plt.scatter(x=y_test_labels.index,y=dataset_df[str(labels.columns.values[0])].iloc[test_index],label="test")
         plt.legend()
         plt.show()
 
-train_model(dtc,iris_kfold_n5)
+train_model(dtc,dataset_kfolded)
 
 #Printing occurances
 print(pd.concat(occurance_df,axis=1, sort=False))
