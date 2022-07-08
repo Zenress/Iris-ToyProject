@@ -7,7 +7,7 @@ dependencies:
  - pandas=1.4.2
  - markupsafe=2.0.0
  - scikit-learn=1.0.2
- - numpy=1.22.3
  - pip:
     - pandas-profiling==3.2.0
     - matplotlib==3.5.2
+    - numpy==1.23
