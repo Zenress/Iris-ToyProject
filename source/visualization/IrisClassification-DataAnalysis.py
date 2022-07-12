@@ -16,7 +16,6 @@ labels = dataset_df.select_dtypes(include=['object'])
 label_encoder = preprocessing.LabelEncoder()
 
 #Encoding the last column header to an int datatype
-iris_class_names = dataset_df[str(labels.columns.values[0])]
 dataset_df[str(labels.columns.values[0])] = label_encoder.fit_transform(dataset_df[str(labels.columns.values[0])])
 print(dataset_df)
 
