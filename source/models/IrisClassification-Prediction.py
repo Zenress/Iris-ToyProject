@@ -9,8 +9,6 @@ with open("configuration/config.yaml", "r") as ymlfile:
 loaded_model = pickle.load(open(cfg["file_paths"]["model_path"], 'rb'))
 mappings_file = pickle.load(open(cfg["file_paths"]["encoder_mappings"],"rb"))
 list_mappings = list(mappings_file)
-print(list_mappings)
-
 
 def prediction(): 
     """_summary_
@@ -57,5 +55,3 @@ def prediction():
         prediction()
 
 prediction()
-
-#input needs to disallow non-unicode if i have time

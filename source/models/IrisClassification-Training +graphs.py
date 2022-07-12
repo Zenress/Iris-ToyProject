@@ -19,7 +19,7 @@ labels = dataset_df.select_dtypes(include=['object'])
 
 label_encoder = preprocessing.LabelEncoder()
 
-#Encoding the last column header to an int datatype
+#Encoding the categorical column header to an int datatype
 dataset_df[str(labels.columns.values[0])] = label_encoder.fit_transform(dataset_df[str(labels.columns.values[0])])
 dataset_features = dataset_df.drop(columns=labels)
 
