@@ -17,8 +17,8 @@ def prediction():
     Conditions checked for:
     Datatype: Float
     Length: 4 floats seperated by ,
-    Maximum: 10
-    Minimum 0.1
+    Maximum: [7.9, 4.4, 6.9, 2.5] Depending on iteration
+    Minimum: [4.3, 2, 1, 0.1] Depending on iteration
     Along with user instructions to follow
 
     Try:
@@ -58,6 +58,4 @@ def prediction():
 
 prediction()
 
-#Check what is necessary for someone who knows their way around a terminal
-#Read through the readme so it's more relevant and less info dumping when unnecessary
 #input needs to disallow non-unicode if i have time
