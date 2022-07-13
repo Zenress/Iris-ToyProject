@@ -1,11 +1,15 @@
-
-file_paths:
-  model_path: models/irisdata_classification_model.sav
-  dataset_path: source/data/irisdata_raw.csv
-  iris_analysis_report_path: reports/irisreport.html
-  encoder_mappings: source/data/encoder_mapping.pkl
+model_name: irisdata_classification_model.sav
+dataset_name: irisdata_raw.csv
+iris_analysis_report_name: irisreport.html
+encoder_mappings: encoder_mapping.npy
 
 column_names: ["sepal length","sepal width","petal length","petal width","class"]
+features: ["sepal length","sepal width","petal length","petal width"]
+label_name: 'class'
+
+cmd_arguments:
+  options: "g"
+  long_options: ["graphs"]
 
 decisiontree_settings:
  criterion: entropy
