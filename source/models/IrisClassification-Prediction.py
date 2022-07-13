@@ -1,14 +1,14 @@
 import pickle
 import numpy as np
+from sklearn.preprocessing import LabelEncoder
 import yaml
 #Using configuration file for variables
 with open("configuration/config.yaml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
 
-loaded_model = pickle.load(open(cfg["file_paths"]["model_path"], 'rb'))
-mappings_file = pickle.load(open(cfg["file_paths"]["encoder_mappings"],"rb"))
-list_mappings = list(mappings_file)
+loaded_model = pickle.load(open("models/" + cfg["model_name"], 'rb'))
+mappings_file = np.load("models/" + cfg["encoder_mappings"], allow_pickle=True)
 
 def prediction(): 
     """_summary_
@@ -43,7 +43,7 @@ def prediction():
         
         if len(edited_input) == 4:
             class_value = loaded_model.predict(np.reshape(edited_input,(1,4)))
-            print(class_value,'=',list_mappings[class_value[0]])
+            print(class_value,'=',mappings_file[class_value[0]])
             
         else:
             print("You have not fulfilled the format requirements")
@@ -55,3 +55,16 @@ def prediction():
         prediction()
 
 prediction()
+#Make sure the highest and lowest number match the iteration
+#Iterate through the columns instead of a comma seperated list
+#label is not labels as there is only one label
+#label name in config, instead of in code
+#Features in config instead of in code
+#Follow more machine learning naming conventions
+#Update readme with new file distribution
+#explanation of configuration file?
+#Avoid casting.
+#Make code shorter using configuration
+#Encoder included with model file?
+#Change the way the Encoder is saved and loaded
+#Review what the zip function does

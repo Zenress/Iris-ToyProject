@@ -7,7 +7,7 @@ with open("./configuration/config.yaml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
 #Assigning custom column headers while reading the csv file
-dataset_df = pd.read_csv(cfg["file_paths"]["dataset_path"], header=None, names=cfg["column_names"])
+dataset_df = pd.read_csv("reports/"+cfg["dataset_name"], header=None, names=cfg["column_names"])
 print(dataset_df)
 
 #Labels based on the single categorical column in the dataset
@@ -21,4 +21,4 @@ print(dataset_df)
 
 
 data_profile = pp.ProfileReport(dataset_df, title=cfg["report_settings"]["title"], explorative=True)
-data_profile.to_file(cfg["file_paths"]["iris_analysis_report_path"])
+data_profile.to_file("reports/"+cfg["iris_analysis_report_name"])
