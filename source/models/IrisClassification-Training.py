@@ -32,6 +32,30 @@ dataset_kfolded = StratifiedKFold(n_splits=cfg["kfold_settings"]["nr_splits"],
 occurance_df = []
 arguments, dummy = getopt.getopt(sys.argv[1:],cfg["cmd_arguments"]["options"],cfg["cmd_arguments"]["long_options"])
 
+def graphing(iterator, train_index, test_index, y_train_labels, y_test_labels):
+    try:
+            for current_arg, dummy in arguments:
+                if current_arg in ("-g","--graphs"):
+                    o_train = y.iloc[train_index].value_counts()
+                    o_train.name = f"train {iterator}"
+                    o_test = y.iloc[test_index].value_counts()
+                    o_test.name = f"test {iterator}"
+                    df = pd.concat([o_train, o_test], axis=1, sort=False)
+                    df["|"] = "|"
+                    occurance_df.append(df)
+                    
+                    plt.scatter(x=y_train_labels.index,y=y.iloc[train_index],label="train")
+                    plt.scatter(x=y_test_labels.index,y=y.iloc[test_index],label="test")
+                    plt.legend()
+                    plt.show()   
+                    
+                    if iterator == cfg["kfold_settings"]["nr_splits"]:
+                        print(pd.concat(occurance_df,axis=1, sort= False))
+                    
+    except getopt.error as err:
+        # output error, and return with an error code
+        print (str(err))
+
 X = dataset_df[cfg["features"]]
 y = dataset_df[cfg["label_name"]] #TODO: Missing encoder?
 
@@ -46,43 +70,24 @@ def train_model(dtc,dataset_kfolded):
     """
     i = 1
     for train_index, test_index in dataset_kfolded.split(X,y):
-        x_train = X.iloc[train_index]
-        x_test = X.iloc[test_index]
-        y_train_labels = y.iloc[train_index]
-        y_test_labels = y.iloc[test_index]
+        X_train = X.iloc[train_index]
+        X_test = X.iloc[test_index]
+        y_train = y.iloc[train_index]
+        y_test = y.iloc[test_index]
 
-        dtc = dtc.fit(x_train,y_train_labels)
-        print(f"Accuracy for the fold nr. {i} on the test set: {metrics.accuracy_score(y_test_labels, dtc.predict(x_test))}, doublecheck: {dtc.score(x_test,y_test_labels)}")
+        dtc = dtc.fit(X_train,y_train)
+        print(f"Accuracy for the fold nr. {i} on the test set: {metrics.accuracy_score(y_test, dtc.predict(X_test))}, doublecheck: {dtc.score(X_test,y_test)}")
         
-        try:
-            for current_arg, dummy in arguments:
-                if current_arg in ("-g","--graphs"):
-                    o_train = y.iloc[train_index].value_counts()
-                    o_train.name = f"train {i}"
-                    o_test = y.iloc[test_index].value_counts()
-                    o_test.name = f"test {i}"
-                    df = pd.concat([o_train, o_test], axis=1, sort=False)
-                    df["|"] = "|"
-                    occurance_df.append(df)
-                    
-                    plt.scatter(x=y_train_labels.index,y=y.iloc[train_index],label="train")
-                    plt.scatter(x=y_test_labels.index,y=y.iloc[test_index],label="test")
-                    plt.legend()
-                    plt.show()   
-                    
-                    if i == cfg["kfold_settings"]["nr_splits"]:
-                        print(pd.concat(occurance_df,axis=1, sort= False))
-                    
-        except getopt.error as err:
-            # output error, and return with an error code
-            print (str(err))
+        graphing(i, train_index, test_index, y_train, y_test)
 
         i += 1
 
 train_model(dtc,dataset_kfolded)  
 
-#Saves the file to the given path
-pickle.dump(dtc,open("models/"+cfg["model_name"], 'wb'))
+files = {
+    "model": dtc,
+    "encoder_mappings": label_encoder.classes_,
+}
 
-#Saves encoder mapping to a pkl file
-np.save("models/"+cfg["encoder_mappings"],label_encoder.classes_)
+#Saves the file to the given path
+pickle.dump(files, open("models/"+cfg["model_and_encoder_name"], 'wb'))
