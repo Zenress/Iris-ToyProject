@@ -11,12 +11,12 @@ dataset_df = pd.read_csv("reports/"+cfg["dataset_name"], header=None, names=cfg[
 print(dataset_df)
 
 #Labels based on the single categorical column in the dataset
-labels = dataset_df.select_dtypes(include=['object'])
+label = dataset_df.select_dtypes(include=['object'])
 
 label_encoder = preprocessing.LabelEncoder()
 
 #Encoding the last column header to an int datatype
-dataset_df[str(labels.columns.values[0])] = label_encoder.fit_transform(dataset_df[str(labels.columns.values[0])])
+dataset_df[str(label.columns.values[0])] = label_encoder.fit_transform(dataset_df[str(label.columns.values[0])])
 print(dataset_df)
 
 
