@@ -1,13 +1,12 @@
 import pickle
 import numpy as np
-from sklearn.preprocessing import LabelEncoder
 import yaml
 #Using configuration file for variables
 with open("configuration/config.yaml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-loaded_dictionary = pickle.load(open("models/" + cfg["model_and_encoder_name"], 'rb'))
-mappings_file = loaded_dictionary["encoder_mappings"]
+model_encoder_dictionary = pickle.load(open("models/" + cfg["model_and_encoder_name"], 'rb'))
+mappings_file = model_encoder_dictionary["encoder_mappings"]
 
 def prediction(): 
     """_summary_
@@ -41,16 +40,12 @@ def prediction():
                     raise ValueError()
                 
             except ValueError:
-                print("___________________________________________________")
                 print(f"Please enter a Float that's between {cfg['input_min_values'][feature_nr]} and {cfg['input_max_values'][feature_nr]}\n \n \n")
                 break
             
-    class_value = loaded_dictionary["model"].predict(np.reshape(edited_input,(1,4)))
+    class_value = model_encoder_dictionary["model"].predict(np.reshape(edited_input,(1,4)))
     print(class_value,'=',mappings_file[class_value[0]])
 
 prediction()
 #Follow more machine learning naming conventions
-#explanation of configuration file?
-#Avoid casting.
-#Make code shorter using configuration
 #Review what the zip function does
