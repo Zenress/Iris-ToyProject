@@ -1,6 +1,6 @@
 #Imports used in the Project
 import pickle
-import getopt, sys
+import argparse
 import matplotlib.pyplot as plt
 import yaml
 import pandas as pd
@@ -11,10 +11,14 @@ from sklearn.tree import DecisionTreeClassifier
 
 MODEL_PATH = 'models/'#TODO: Create more like this
 DATASET_PATH = 'source/data/'
+CONFIG_PATH = 'configuration/config.yaml'
 
 #Using configuration file for variables
-with open("configuration/config.yaml", "r") as ymlfile:
+with open(CONFIG_PATH, "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
+
+parser = argparse.ArgumentParser()
+parser.add_argument(cfg['cmd_arguments'], help="Enables Graphing", action="store_true")
 
 #Assigning custom column headers while reading the csv file
 dataset_df = pd.read_csv(DATASET_PATH+cfg["dataset_name"], header=None, names=cfg["column_names"])
@@ -33,44 +37,7 @@ dtc_model = DecisionTreeClassifier(criterion=cfg["decisiontree_settings"]["crite
 data_kfolded = StratifiedKFold(n_splits=cfg["kfold_settings"]["nr_splits"], 
                                 shuffle=cfg["kfold_settings"]["shuffle"], 
                                 random_state=cfg["kfold_settings"]["random_state"])  # Randomstate for uniform results
-
-def graphing(iterator, train_index, test_index, y_train, y_test): #TODO: Remove Dependency on another function
-    """_summary_
-    Plots and graphs the dataset and training progress
-
-    Args:
-        iterator (int): used to interate through the command line arguments
-        train_index (int): used to count train record occurances
-        test_index (int): used to count test record occurances
-        y_train_labels (int): encoded training labels
-        y_test_labels (int): encoded testing labels
-    """
-    #TODO: Remove anything that isn't excplicitly Graphing and move outside of functions
-    arguments, dummy = getopt.getopt(sys.argv[1:],cfg["cmd_arguments"]["options"],cfg["cmd_arguments"]["long_options"])
-    try:
-        occurance_df = []
-        for current_arg, dummy in arguments:
-            if current_arg in ("-g","--graphs"):
-                o_train = y.iloc[train_index].value_counts()
-                o_train.name = f"train {iterator}"
-                o_test = y.iloc[test_index].value_counts()
-                o_test.name = f"test {iterator}"
-                df = pd.concat([o_train, o_test], axis=1, sort=False)
-                df["|"] = "|"
-                occurance_df.append(df)
                 
-                plt.scatter(x=y_train.index,y=y.iloc[train_index],label="train")
-                plt.scatter(x=y_test.index,y=y.iloc[test_index],label="test")
-                plt.legend()
-                plt.show()
-                
-                if iterator == cfg["kfold_settings"]["nr_splits"]:
-                    print(pd.concat(occurance_df,axis=1, sort= False))
-                    
-    except getopt.error:
-        # output error, and return with an error code
-        print (str(getopt.error))
-
 def train_model(dtc_model,data_kfolded):
     """_summary_
     Train Model Function that trains a DecisionTreeClassifier using a KFolded dataset
@@ -92,11 +59,35 @@ def train_model(dtc_model,data_kfolded):
     
         i += 1
 
-    #TODO: Run IF statement to check if Graphing is needed then run the graphing in a for loop for the amount of splits 
+def graphing(): #TODO: Remove Dependency on another function
+    """_summary_
+    Plots and graphs the dataset and training progress
+    """
+    occurance_df = []
+    round = 1
+    for train_index, test_index in data_kfolded.split(X,y):
+        o_train = y.iloc[train_index].value_counts()
+        o_train.name = f"train {round}"
+        o_test = y.iloc[test_index].value_counts()
+        o_test.name = f"test {round}"
+        df = pd.concat([o_train, o_test], axis=1, sort=False)
+        df["|"] = "|"
+        occurance_df.append(df)
+        
+        plt.scatter(x=y.iloc[train_index].index,y=y.iloc[train_index],label="train")
+        plt.scatter(x=y.iloc[test_index].index,y=y.iloc[test_index],label="test")
+        plt.legend()
+        plt.show()
+        round+=1
+        
+    print(pd.concat(occurance_df,axis=1, sort= False))
+
 
 train_model(dtc_model,data_kfolded)  #TODO Run graphing outside of Train model?
 
-graphing(i, train_index, test_index, y_train, y_test) #TODO: Don't run unless needed
+args = parser.parse_args()
+if args.graphs:
+    graphing() #TODO: Don't run unless needed
 
 dtc_model_and_encoder_mapping = {
     "model": dtc_model,
