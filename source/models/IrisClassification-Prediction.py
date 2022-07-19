@@ -23,13 +23,14 @@ def prediction():
         ValueError: Raises a valueerror when you type wrong datatype or too low / high number
     """
     edited_input = []
-    while len(edited_input) != len(cfg["features"]):
-        for feature_nr in range(len(cfg["features"])):
-            print(f"Write the data you want to be predicted {feature_nr+1}/4:")
+    while len(edited_input) != len(cfg["features"]): #TODO: More pythonic usage
+        for key, value in cfg["features"].items():
+            print(key, value)
+            print(f"Write the data you want to be predicted {key+1}/4:")
             print(f"Input Feature: {cfg['features'][feature_nr]}")
             print("Datatype: Float")
-            print(f"Highest Possible Number: {cfg['input_max_values'][feature_nr]}")
-            print(f"Lowest Possible Number: {cfg['input_min_values'][feature_nr]}")
+            print(f"Highest Possible Number: {value['max']}")
+            print(f"Lowest Possible Number: {value['min']}")
             user_input = input("Write here: ")
             print("____________________________________________")
         
@@ -47,5 +48,6 @@ def prediction():
     print(class_value,'=',mappings_file[class_value[0]])
 
 prediction()
-#Follow more machine learning naming conventions
-#Review what the zip function does
+#Divide Data analysis into a function
+#Argparse instead of Getopt
+#Better function layout
