@@ -9,12 +9,15 @@ from sklearn import preprocessing
 from sklearn import metrics
 from sklearn.tree import DecisionTreeClassifier
 
+MODEL_PATH = 'models/'#TODO: Create more like this
+DATASET_PATH = 'source/data/'
+
 #Using configuration file for variables
 with open("configuration/config.yaml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
 #Assigning custom column headers while reading the csv file
-dataset_df = pd.read_csv("source/data/"+cfg["dataset_name"], header=None, names=cfg["column_names"])
+dataset_df = pd.read_csv(DATASET_PATH+cfg["dataset_name"], header=None, names=cfg["column_names"])
 
 #Labels based on the single categorical column in the dataset
 
@@ -24,14 +27,14 @@ label_encoder = preprocessing.LabelEncoder()
 dataset_df[cfg["label_name"]] = label_encoder.fit_transform(dataset_df[cfg["label_name"]])
 
 X = dataset_df[cfg["features"]]
-y = dataset_df[cfg["label_name"]]
+y = dataset_df[cfg["label_name"]]  
 
 dtc_model = DecisionTreeClassifier(criterion=cfg["decisiontree_settings"]["criterion"])
 data_kfolded = StratifiedKFold(n_splits=cfg["kfold_settings"]["nr_splits"], 
                                 shuffle=cfg["kfold_settings"]["shuffle"], 
                                 random_state=cfg["kfold_settings"]["random_state"])  # Randomstate for uniform results
 
-def graphing(iterator, train_index, test_index, y_train_labels, y_test_labels):
+def graphing(iterator, train_index, test_index, y_train, y_test): #TODO: Remove Dependency on another function
     """_summary_
     Plots and graphs the dataset and training progress
 
@@ -42,6 +45,7 @@ def graphing(iterator, train_index, test_index, y_train_labels, y_test_labels):
         y_train_labels (int): encoded training labels
         y_test_labels (int): encoded testing labels
     """
+    #TODO: Remove anything that isn't excplicitly Graphing and move outside of functions
     arguments, dummy = getopt.getopt(sys.argv[1:],cfg["cmd_arguments"]["options"],cfg["cmd_arguments"]["long_options"])
     try:
         occurance_df = []
@@ -55,8 +59,8 @@ def graphing(iterator, train_index, test_index, y_train_labels, y_test_labels):
                 df["|"] = "|"
                 occurance_df.append(df)
                 
-                plt.scatter(x=y_train_labels.index,y=y.iloc[train_index],label="train")
-                plt.scatter(x=y_test_labels.index,y=y.iloc[test_index],label="test")
+                plt.scatter(x=y_train.index,y=y.iloc[train_index],label="train")
+                plt.scatter(x=y_test.index,y=y.iloc[test_index],label="test")
                 plt.legend()
                 plt.show()
                 
@@ -85,12 +89,14 @@ def train_model(dtc_model,data_kfolded):
 
         dtc_model = dtc_model.fit(X_train,y_train)
         print(f"Accuracy for the fold nr. {i} on the test set: {metrics.accuracy_score(y_test, dtc_model.predict(X_test))}, doublecheck: {dtc_model.score(X_test,y_test)}")
-        
-        graphing(i, train_index, test_index, y_train, y_test)
-
+    
         i += 1
 
-train_model(dtc_model,data_kfolded)  
+    #TODO: Run IF statement to check if Graphing is needed then run the graphing in a for loop for the amount of splits 
+
+train_model(dtc_model,data_kfolded)  #TODO Run graphing outside of Train model?
+
+graphing(i, train_index, test_index, y_train, y_test) #TODO: Don't run unless needed
 
 dtc_model_and_encoder_mapping = {
     "model": dtc_model,
@@ -98,4 +104,4 @@ dtc_model_and_encoder_mapping = {
 }
 
 #Saves the file to the given path
-pickle.dump(dtc_model_and_encoder_mapping, open("models/"+cfg["model_and_encoder_name"], 'wb'))
+pickle.dump(dtc_model_and_encoder_mapping, open(MODEL_PATH+cfg["model_and_encoder_name"], 'wb'))
