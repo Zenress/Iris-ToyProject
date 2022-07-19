@@ -3,7 +3,13 @@ dataset_name: irisdata_raw.csv
 iris_analysis_report_name: irisanalysisreport.html
 
 column_names: ["sepal length","sepal width","petal length","petal width","class"]
-features: ["sepal length","sepal width","petal length","petal width"]
+
+features: 
+  sepal length: {min: 4.3, max: 7.9}
+  sepal width:
+  petal length:
+  petal width:
+  
 label_name: 'class'
 
 cmd_arguments:
