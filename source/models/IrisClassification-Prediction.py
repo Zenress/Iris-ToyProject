@@ -1,11 +1,15 @@
 import pickle
 import numpy as np
 import yaml
+
+MODEL_PATH = 'models/'
+CONFIG_PATH = 'configuration/config.yaml'
+
 #Using configuration file for variables
-with open("configuration/config.yaml", "r") as ymlfile:
+with open(CONFIG_PATH, "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-model_encoder_dictionary = pickle.load(open("models/" + cfg["model_and_encoder_name"], 'rb'))
+model_encoder_dictionary = pickle.load(open(MODEL_PATH + cfg["model_and_encoder_name"], 'rb'))
 mappings_file = model_encoder_dictionary["encoder_mappings"]
 
 def prediction(): 
@@ -23,11 +27,11 @@ def prediction():
         ValueError: Raises a valueerror when you type wrong datatype or too low / high number
     """
     edited_input = []
-    while len(edited_input) != len(cfg["features"]): #TODO: More pythonic usage
+    round_nr = 0
+    while len(edited_input) != len(cfg["features"]):
         for key, value in cfg["features"].items():
-            print(key, value)
-            print(f"Write the data you want to be predicted {key+1}/4:")
-            print(f"Input Feature: {cfg['features'][feature_nr]}")
+            print(f"Write the data you want to be predicted {round_nr+1}/4:")
+            print(f"Input Feature: {key}")
             print("Datatype: Float")
             print(f"Highest Possible Number: {value['max']}")
             print(f"Lowest Possible Number: {value['min']}")
@@ -35,13 +39,13 @@ def prediction():
             print("____________________________________________")
         
             try:            
-                if float(user_input) >= cfg['input_min_values'][feature_nr] and float(user_input) <= cfg['input_max_values'][feature_nr]:  
+                if float(user_input) >= value['min'] and float(user_input) <= value['max']:  
                     edited_input.append(user_input)
                 else:
                     raise ValueError()
                 
             except ValueError:
-                print(f"Please enter a Float that's between {cfg['input_min_values'][feature_nr]} and {cfg['input_max_values'][feature_nr]}\n \n \n")
+                print(f"Please enter a Float that's between {value['min']} and {value['max']}\n \n \n")
                 break
             
     class_value = model_encoder_dictionary["model"].predict(np.reshape(edited_input,(1,4)))
