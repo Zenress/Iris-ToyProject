@@ -9,13 +9,7 @@ DATASET_PATH = 'source/data/'
 with open("./configuration/config.yaml", "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-#Assigning custom column headers while reading the csv file
-data_df = pd.read_csv(DATASET_PATH + cfg["dataset_name"], header=None, names=cfg["column_names"])
-print(data_df)
-
-label_encoder = preprocessing.LabelEncoder()
-
-def data_analysis():
+def data_analysis(label_encoder, data_df):
     #Encoding the last column header to an int datatype
     data_df[cfg["label_name"]] = label_encoder.fit_transform(data_df[cfg["label_name"]])
     print(data_df)
@@ -23,4 +17,14 @@ def data_analysis():
     data_profile = pp.ProfileReport(data_df, title=cfg["report_settings"]["title"], explorative=True)
     data_profile.to_file("reports/"+cfg["iris_analysis_report_name"])
 
-data_analysis()
+def main():
+    #Assigning custom column headers while reading the csv file
+    data_df = pd.read_csv(DATASET_PATH + cfg["dataset_name"], header=None, names=cfg["column_names"])
+    print(data_df)
+
+    label_encoder = preprocessing.LabelEncoder()
+    
+    data_analysis(label_encoder, data_df)
+    
+if __name__ == "__main__":
+    main()

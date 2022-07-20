@@ -9,10 +9,7 @@ CONFIG_PATH = 'configuration/config.yaml'
 with open(CONFIG_PATH, "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-model_encoder_dictionary = pickle.load(open(MODEL_PATH + cfg["model_and_encoder_name"], 'rb'))
-mappings_file = model_encoder_dictionary["encoder_mappings"]
-
-def prediction(): 
+def value_check(): 
     """_summary_
     Conditions checked for:
     Datatype: Float
@@ -43,15 +40,25 @@ def prediction():
                     edited_input.append(user_input)
                 else:
                     raise ValueError()
-                
+        
             except ValueError:
                 print(f"Please enter a Float that's between {value['min']} and {value['max']}\n \n \n")
                 break
+    
+    return edited_input
             
-    class_value = model_encoder_dictionary["model"].predict(np.reshape(edited_input,(1,4)))
-    print(class_value,'=',mappings_file[class_value[0]])
+def prediction(user_input,model_encoder_dictionary, encoder_mappings):
+    class_value = model_encoder_dictionary["model"].predict(np.reshape(user_input,(1,4)))
+    print(class_value,'=',encoder_mappings[class_value[0]])
 
-prediction()
-#Divide Data analysis into a function
-#Argparse instead of Getopt
+def main():
+    model_encoder_dictionary = pickle.load(open(MODEL_PATH + cfg["model_and_encoder_name"], 'rb'))
+    encoder_mappings = model_encoder_dictionary["encoder_mappings"]
+    
+    user_input = value_check()
+    
+    prediction(user_input, model_encoder_dictionary, encoder_mappings)
+
+if __name__ == "__main__":
+    main()
 #Better function layout
