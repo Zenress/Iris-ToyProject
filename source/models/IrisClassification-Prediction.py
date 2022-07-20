@@ -34,24 +34,33 @@ def value_check():
             print(f"Lowest Possible Number: {value['min']}")
             user_input = input("Write here: ")
             print("____________________________________________")
-        
-            try:            
+
+            try:
                 if float(user_input) >= value['min'] and float(user_input) <= value['max']:  
                     edited_input.append(user_input)
                 else:
                     raise ValueError()
-        
+
             except ValueError:
-                print(f"Please enter a Float that's between {value['min']} and {value['max']}\n \n \n")
+                print(f"Please enter a Float that's between {value['min']} and {value['max']}")
                 break
-    
+
     return edited_input
-            
+
 def prediction(user_input,model_encoder_dictionary, encoder_mappings):
+    """_summary_
+
+    Args:
+        user_input (_type_): _description_
+        model_encoder_dictionary (_type_): _description_
+        encoder_mappings (_type_): _description_
+    """
     class_value = model_encoder_dictionary["model"].predict(np.reshape(user_input,(1,4)))
     print(class_value,'=',encoder_mappings[class_value[0]])
 
 def main():
+    """_summary_
+    """
     model_encoder_dictionary = pickle.load(open(MODEL_PATH + cfg["model_and_encoder_name"], 'rb'))
     encoder_mappings = model_encoder_dictionary["encoder_mappings"]
     
@@ -61,4 +70,8 @@ def main():
 
 if __name__ == "__main__":
     main()
-#Better function layout
+#Check if Docstring rules are met
+#Make sure functions are 1 logical function only
+#Create more functions if there are too many logical functions in a function
+#Make sure every function has a doc string
+#Look through Readme file to see if there is anything that has to be changed after code refactoring

@@ -17,14 +17,29 @@ CONFIG_PATH = 'configuration/config.yaml'
 with open(CONFIG_PATH, "r") as ymlfile:
     cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-def train_model(dtc_model,data_kfolded, X, y):
+def arguments_handler():
     """_summary_
-    Train Model Function that trains a DecisionTreeClassifier using a KFolded dataset
-    It splits the dataset between x and y training and testing variables
+
+    _longer summary_
+    
+    Returns:
+        _type_: _description_
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument(cfg['cmd_arguments'], help="Enables Graphing", action="store_true")
+    args = parser.parse_args()
+    return args 
+
+def train_model(dtc_model,data_kfolded, X, y):
+    """Trains DecisionTreeClassifier Model using Iris Dataset
+    
+    Trains a DecisionTreeClassifier using a KFolded dataset.
+    Splits dataset between feature columns and labels,
+    and then further splits them into a training and testing set.
     
     Args:
-        dtc_model (DecisionTreeClassifier): An untrained DecisionTreeClassifier used for classifying the KFolded Iris Dataset
-        data_kfolded (StratifiedKFold): A KFolded Dataset
+        dtc_model (sklearn.tree.DecisionTreeClassifier): An untrained DecisionTreeClassifier used for classifying the KFolded Iris Dataset
+        data_kfolded (sklearn.model_selection.StratifiedKFold): A KFolded Dataset
     """
     i = 1
     for train_index, test_index in data_kfolded.split(X,y):
@@ -33,14 +48,17 @@ def train_model(dtc_model,data_kfolded, X, y):
         y_train = y.iloc[train_index]
         y_test = y.iloc[test_index]
 
-        dtc_model = dtc_model.fit(X_train,y_train)
+        dtc_model = dtc_model.fit(X_train,y_train)æ
         print(f"Accuracy for the fold nr. {i} on the test set: {metrics.accuracy_score(y_test, dtc_model.predict(X_test))}, doublecheck: {dtc_model.score(X_test,y_test)}")
     
         i += 1
 
-def graphing(args, data_kfolded, X, y): #TODO: Remove Dependency on another function
-    """_summary_
-    Plots and graphs the dataset and training progress
+def graphing(args, data_kfolded, X, y):
+    """
+    Plot dataset and training progress to graph
+    
+    _longer summary_
+    
     """
     if args.graphs:
         occurance_df = []
@@ -62,14 +80,33 @@ def graphing(args, data_kfolded, X, y): #TODO: Remove Dependency on another func
             round+=1
             
         print(pd.concat(occurance_df,axis=1, sort= False))
+
+def save_file(model,encoder):
+    """
+    Save model and encoder mappings
     
-def arguments_handler():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(cfg['cmd_arguments'], help="Enables Graphing", action="store_true")
-    args = parser.parse_args()
-    return args 
+    Saving the trained model and encoder mappings that was used in the model.
+    A dictionary is used to save both objects and pickle them into a single file.
+
+    Args:
+        model (sklearn.tree.DecisionTreeClassifier): _description_
+        encoder (sklearn.preprocessing.LabelEncoder): _description_
+    """
+    dtc_model_and_encoder_mapping = {
+        "model": model,
+        "encoder_mappings": encoder.classes_,
+    }
+
+    #Saves the file to the given path
+    pickle.dump(dtc_model_and_encoder_mapping, open(MODEL_PATH+cfg["model_and_encoder_name"], 'wb'))
+
 
 def main():
+    """_summary_
+    
+    _longer summary_
+    
+    """
     label_encoder = preprocessing.LabelEncoder()
     
     #Assigning custom column headers while reading the csv file
@@ -92,13 +129,7 @@ def main():
 
     graphing(args, data_kfolded, X, y)
 
-    dtc_model_and_encoder_mapping = {
-        "model": dtc_model,
-        "encoder_mappings": label_encoder.classes_,
-    }
-
-    #Saves the file to the given path
-    pickle.dump(dtc_model_and_encoder_mapping, open(MODEL_PATH+cfg["model_and_encoder_name"], 'wb'))
+    save_file(dtc_model,label_encoder)
     
 if __name__ == "__main__":
     main()
