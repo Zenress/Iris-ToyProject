@@ -52,7 +52,9 @@ def train_model(dtc_model,data_kfolded, X, y):
         y_test = y.iloc[test_index]
 
         dtc_model = dtc_model.fit(X_train,y_train)
-        print(f"Accuracy for fold nr. {i} on test set: {metrics.accuracy_score(y_test, dtc_model.predict(X_test))}")
+        print((f"Accuracy for fold nr. {i} on test set:"
+               f" {metrics.accuracy_score(y_test, dtc_model.predict(X_test))} - "
+               f"Double check: {dtc_model.score(X_test,y_test)}"))
 
         i += 1
 
