@@ -89,7 +89,7 @@ This program is meant to predict on the saved training model from the Training P
 To run the Prediction program use the console command below:
 
 ```console
-python source/models/IrisClassification-Prediction.py 
+python source/models/iris_classification_prediction.py
 ```
 
 Prediction is run in an iterative way, so that you only have to enter a number for the currently selected feature column
@@ -101,7 +101,7 @@ This program is gonna train the **DecisionTreeClassifier** Model with the **Iris
 To run the Training program use the console command below:
 
 ```console
-python source/models/IrisClassification-Training.py
+python source/models/iris_classification_training.py
 ```
 
 There is also the option to enable graphing which will tell you how the **KFold** looks in terms of data distribution after the **KFold** and how the encoding looks on the **class label column**
@@ -109,7 +109,7 @@ There is also the option to enable graphing which will tell you how the **KFold*
 To enable graphing on the training file, you would add --graphs to the end of the terminal command:
 
 ```console
-python source/models/IrisClassification-Training.py --graphs
+python source/models/iris_classification_training.py --graphs
 ```
 
 #### Data Analysis
@@ -119,12 +119,12 @@ This program serves to show you information, correlations, maximum and minimum, 
 To start the program use the command:
 
 ```console
-python source/visualization/IrisClassification-DataAnalysis.py
+python source/visualization/iris_classification_dataAnalysis.py
 ```
 
 Using **Data Analysis** tools i have been able to understand the dataset a lot better than i did before.
 
-Pandas-profling gave me a detailed report about Correlation and Interactions, along with Maximum and Minimum ranges for each feature. (`reports/irisreport.html`)
+Pandas-profling gave me a detailed report about Correlation and Interactions, along with Maximum and Minimum ranges for each feature. (`reports/iris_analysis_report.html`)
 
 ##### Dataset
 
