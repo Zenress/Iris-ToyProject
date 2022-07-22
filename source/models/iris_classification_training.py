@@ -16,7 +16,6 @@ DATASET_PATH = 'source/data/'
 CONFIG_PATH = 'configuration/config.yaml'
 
 
-
 def arguments_handler(cmd_arguments):
     """_summary_
 
@@ -122,7 +121,6 @@ def main():
     the finished training and encoding is saved to a file as dictionaries.
 
     """
-    #Using configuration file for variables
     with open(CONFIG_PATH, "r", encoding='UTF-8') as ymlfile:
         cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 

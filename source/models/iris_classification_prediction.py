@@ -8,12 +8,11 @@ import yaml
 MODEL_PATH = 'models/'
 CONFIG_PATH = 'configuration/config.yaml'
 
-#Using configuration file for variables
-with open(CONFIG_PATH, "r") as ymlfile:
-    cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-def value_check():
-    """_summary_
+def value_check(feature_dict):
+    """
+    Check conditions
+
     Conditions checked for:
     Datatype: Float
     Length: 1 number for each iteration
@@ -22,14 +21,14 @@ def value_check():
     Along with user instructions to follow
 
     Try:
-     Checks for different input requirements
+        Checks for different input requirements
     Raises:
         ValueError: Raises a valueerror when you type wrong datatype or too low / high number
     """
     edited_input = []
     round_nr = 0
-    while len(edited_input) != len(cfg["features"]):
-        for key, value in cfg["features"].items():
+    while len(edited_input) != len(feature_dict):
+        for key, value in feature_dict.items():
             print(f"Write the data you want to be predicted {round_nr+1}/4:")
             print(f"Input Feature: {key}")
             print("Datatype: Float")
@@ -50,37 +49,44 @@ def value_check():
 
     return edited_input
 
-def prediction(user_input,model_encoder_dictionary, encoder_mappings):
-    """_summary_
+def prediction(user_input,model_encoder_dictionary):
+    """
+    Predict on Decistion Tree Model
+
+    Using the predict function of SKlearn DecisionTreeClassifier,
+    accompanied by the corresponding encoder mapping to produce a readable prediction
 
     Args:
-        user_input (_type_): _description_
-        model_encoder_dictionary (_type_): _description_
-        encoder_mappings (_type_): _description_
+        user_input (list): user input edited into a 4 item list
+        model_encoder_dictionary (dict): dictionary with the model and encoder objects
+        encoder_mappings (array): array of the encoder.classes_ mappings
     """
     class_value = model_encoder_dictionary["model"].predict(np.reshape(user_input,(1,4)))
-    print(class_value,'=',encoder_mappings[class_value[0]])
+    print(class_value,'=',model_encoder_dictionary['encoder_mappings'][class_value[0]])
 
 def main():
     """
-    _summary_
+    Execute at runtime
 
-    _long_summary_
+    initializing configuration file ->,
+    loading the pickled dictionary model_encoder_dictionary ->,
+    Running the value_check to make sure the prediction conditions are met ->,
+    Predicting using the value_check result and the encoder mappings.
 
     """
+    with open(CONFIG_PATH, "r", encoding='UTF-8') as ymlfile:
+        cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
+
     model_encoder_dictionary = pickle.load(open(MODEL_PATH + cfg["model_and_encoder_name"], 'rb'))
-    encoder_mappings = model_encoder_dictionary["encoder_mappings"]
 
-    user_input = value_check()
+    user_input = value_check(cfg["features"])
 
-    prediction(user_input, model_encoder_dictionary, encoder_mappings)
+    prediction(user_input, model_encoder_dictionary)
 
 if __name__ == "__main__":
     main()
-#TODO: Check if Docstring rules are met
 #TODO: Make sure functions are 1 logical function only
 #TODO: Create more functions if there are too many logical functions in a function
-#TODO: Make sure every function has a doc string
 #TODO: Look through Readme file to see if there is anything that has to be changed after code refactoring
 #TODO: Update run command names in Readme
 #TODO: Complete all docstrings for functions
