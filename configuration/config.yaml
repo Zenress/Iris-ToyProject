@@ -1,6 +1,6 @@
-model_and_encoder_name: irisdata_dtc_model_and_encoder.sav
-dataset_name: irisdata_raw.csv
-iris_analysis_report_name: irisanalysisreport.html
+model_and_encoder_name: 'irisdata_dtc_model_and_encoder.sav'
+dataset_name: 'irisdata_raw.csv'
+iris_analysis_report_name: 'irisanalysisreport.html'
 
 column_names: ["sepal length","sepal width","petal length","petal width","class"]
 
