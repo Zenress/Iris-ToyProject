@@ -15,20 +15,21 @@ MODEL_PATH = 'models/'
 DATASET_PATH = 'source/data/'
 CONFIG_PATH = 'configuration/config.yaml'
 
-#Using configuration file for variables
-with open(CONFIG_PATH, "r") as ymlfile:
-    cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-def arguments_handler():
+
+def arguments_handler(cmd_arguments):
     """_summary_
 
-    _longer summary_
+    Handles arguments that are passed through during the run command.
+    Available arguments are: --graphs
 
+    Args:
+        cmd_arguments (str): string with the available command line argument
     Returns:
         _type_: _description_
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument(cfg['cmd_arguments'], help="Enables Graphing", action="store_true")
+    parser.add_argument(cmd_arguments, help="Enables Graphing", action="store_true")
     args = parser.parse_args()
     return args
 
@@ -46,10 +47,10 @@ def train_model(dtc_model,data_kfolded, X, y):
     """
     i = 1
     for train_index, test_index in data_kfolded.split(X,y):
-        X_train = X.iloc[train_index]
-        X_test = X.iloc[test_index]
-        y_train = y.iloc[train_index]
-        y_test = y.iloc[test_index]
+        X_train = X.iloc[train_index].values
+        X_test = X.iloc[test_index].values
+        y_train = y.iloc[train_index].values
+        y_test = y.iloc[test_index].values
 
         dtc_model = dtc_model.fit(X_train,y_train)
         print((f"Accuracy for fold nr. {i} on test set:"
@@ -62,7 +63,9 @@ def graphing(args, data_kfolded, X, y):
     """
     Plot dataset and training progress to graph
 
-    _longer summary_
+    Uses Matplotlib to plot a graph with how the dataset was distributed
+    in the different KFold splits.
+    Afterwards it tells you how it distributed the label records throughout the splits
 
     """
     if args.graphs:
@@ -86,7 +89,7 @@ def graphing(args, data_kfolded, X, y):
 
         print(pd.concat(occurance_df,axis=1, sort= False))
 
-def save_file(model,encoder):
+def save_file(model,encoder, model_and_encoder_name):
     """
     Save model and encoder mappings
 
@@ -102,16 +105,27 @@ def save_file(model,encoder):
         "encoder_mappings": encoder.classes_,
     }
 
-    #Saves the file to the given path
-    pickle.dump(dtc_model_and_encoder_mapping, open(MODEL_PATH+cfg["model_and_encoder_name"], 'wb'))
-
+    pickle.dump(dtc_model_and_encoder_mapping, open(MODEL_PATH+model_and_encoder_name, 'wb'))
 
 def main():
-    """_summary_
+    """
+    Execute at code runtime
 
-    _longer summary_
+    Initiating configuration file ->,
+    Labelencoder is initialized -> Dataset is read ->,
+    Categorical Label Column is encoded to numerical type ->,
+    X is assigned with Features and Y is assigned with Label ->,
+    Model and KFold cross validation is initialized and run ->,
+    arguments_handler is run to check for cmd line arguments ->,
+    the model is trained with train_model ->,
+    graphing is run if correct arguments are present ->,
+    the finished training and encoding is saved to a file as dictionaries.
 
     """
+    #Using configuration file for variables
+    with open(CONFIG_PATH, "r", encoding='UTF-8') as ymlfile:
+        cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
+
     label_encoder = preprocessing.LabelEncoder()
 
     #Assigning custom column headers while reading the csv file
@@ -130,13 +144,13 @@ def main():
                                     shuffle=cfg["kfold_settings"]["shuffle"],
                                     random_state=cfg["kfold_settings"]["random_state"])  # Randomstate for uniform results
 
-    args = arguments_handler()
+    args = arguments_handler(cfg['cmd_arguments'])
 
-    train_model(dtc_model,data_kfolded, X, y) 
+    train_model(dtc_model,data_kfolded, X, y)
 
     graphing(args, data_kfolded, X, y)
 
-    save_file(dtc_model,label_encoder)
+    save_file(dtc_model,label_encoder,cfg["model_and_encoder_name"])
 
 if __name__ == "__main__":
     main()
