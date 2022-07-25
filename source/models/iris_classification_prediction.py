@@ -1,5 +1,5 @@
 """
-Prediction file used for predicting on a DecisionTreeClassified Model
+Prediction file used for predicting on a DecisionTreeClassified Model.
 """
 import pickle
 import numpy as np
@@ -11,19 +11,24 @@ CONFIG_PATH = 'configuration/config.yaml'
 
 def value_check(feature_dict):
     """
-    Check conditions
+    Check conditions.
 
     Conditions checked for:
-    Datatype: Float
-    Length: 1 number for each iteration
-    Maximum: [7.9, 4.4, 6.9, 2.5] Depending on iteration
-    Minimum: [4.3, 2, 1, 0.1] Depending on iteration
-    Along with user instructions to follow
+    Datatype: Float.
+    Length: 1 number for each iteration.
+    Maximum: [7.9, 4.4, 6.9, 2.5] Depending on iteration.
+    Minimum: [4.3, 2, 1, 0.1] Depending on iteration.
+    Along with user instructions to follow.
 
     Try:
-        Checks for different input requirements
+        Checks for different input requirements.
     Raises:
-        ValueError: Raises a valueerror when you type wrong datatype or too low / high number
+        ValueError: Raises a valueerror when you type wrong datatype or too low / high number.
+
+    Args:
+        feature_dict (dict) dictionary of the features,
+            derived from the cfg dictionary object.
+
     """
     edited_input = []
     round_nr = 0
@@ -49,24 +54,24 @@ def value_check(feature_dict):
 
     return edited_input
 
-def prediction(user_input,model_encoder_dictionary):
+def prediction(user_input, model_encoder_dictionary):
     """
-    Predict on Decistion Tree Model
+    Predict on Decistion Tree Model.
 
     Using the predict function of SKlearn DecisionTreeClassifier,
-    accompanied by the corresponding encoder mapping to produce a readable prediction
+    accompanied by the corresponding encoder mapping to produce a readable prediction.
 
     Args:
-        user_input (list): user input edited into a 4 item list
-        model_encoder_dictionary (dict): dictionary with the model and encoder objects
-        encoder_mappings (array): array of the encoder.classes_ mappings
+        user_input (list): user input edited into a 4 item list.
+        model_encoder_dictionary (dict): dictionary with the model and encoder objects.
+
     """
     class_value = model_encoder_dictionary["model"].predict(np.reshape(user_input,(1,4)))
-    print(class_value,'=',model_encoder_dictionary['encoder_mappings'][class_value[0]])
+    print(class_value, '=', model_encoder_dictionary['encoder_mappings'][class_value[0]])
 
 def main():
     """
-    Execute at runtime
+    Execute at runtime.
 
     initializing configuration file ->,
     loading the pickled dictionary model_encoder_dictionary ->,

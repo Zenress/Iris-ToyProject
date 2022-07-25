@@ -1,5 +1,5 @@
 """
-Data Analysis file for creating a profile report and analysing the dataset used
+Data Analysis file for creating a profile report and analysing the dataset used.
 """
 import yaml
 from sklearn import preprocessing
@@ -10,7 +10,7 @@ import pandas_profiling as pp
 DATASET_PATH = 'source/data/'
 REPORT_PATH = 'reports/'
 
-def file_report(altered_data_df,report_title,report_name):
+def file_report(altered_data_df, report_title, report_name):
     """
     Write profile report.
 
@@ -21,6 +21,7 @@ def file_report(altered_data_df,report_title,report_name):
         altered_data_df (pandas.DataFrame): Holds the altered dataframe.
         report_title (str) string gotten from the dictionary it is in.
         report_name (str) name of the report gotten from the configuration file.
+
     """
     data_profile = pp.ProfileReport(altered_data_df,
                                     title=report_title,
