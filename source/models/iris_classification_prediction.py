@@ -85,7 +85,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-#TODO: Make sure functions are 1 logical function only
-#TODO: Create more functions if there are too many logical functions in a function
-#TODO: Look through Readme file to see if there is anything that has to be changed after code refactoring
-#TODO: Make sure there aren't too many logical things done inside main function alone. They should be seperated into functions if possible

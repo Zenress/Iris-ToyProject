@@ -17,7 +17,8 @@ CONFIG_PATH = 'configuration/config.yaml'
 
 
 def arguments_handler(cmd_arguments):
-    """_summary_
+    """
+    Handle commandline arguments
 
     Handles arguments that are passed through during the run command.
     Available arguments are: --graphs
@@ -33,7 +34,8 @@ def arguments_handler(cmd_arguments):
     return args
 
 def train_model(dtc_model,data_kfolded, X, y):
-    """Trains DecisionTreeClassifier Model using Iris Dataset
+    """
+    Train DecisionTreeClassifier Model using Iris Dataset
 
     Trains a DecisionTreeClassifier using a KFolded dataset.
     Splits dataset between feature columns and labels,
@@ -76,6 +78,7 @@ def graphing(args, data_kfolded, X, y):
             o_test = y.iloc[test_index].value_counts()
             o_test.name = f"test {round_nr}"
 
+            #Concatenate 2 pandas objects along a single dataframe axis
             df = pd.concat([o_train, o_test], axis=1, sort=False)
             df["|"] = "|"
             occurance_df.append(df)
@@ -138,6 +141,7 @@ def main():
     y = dataset_df[cfg["label_name"]]
 
     dtc_model = DecisionTreeClassifier(criterion=cfg["decisiontree_settings"]["criterion"])
+
     data_kfolded = StratifiedKFold(n_splits=cfg["kfold_settings"]["nr_splits"],
                                     shuffle=cfg["kfold_settings"]["shuffle"],
                                     random_state=cfg["kfold_settings"]["random_state"])  # Randomstate for uniform results
