@@ -33,21 +33,23 @@ I've learned a lot about **Data analysis**, **Github repositories**, **library/d
 - *SKlearn (StratifiedKFold, Preprocessing, Metrics and DecisionTreeClassifier)*
 - *Matplotlib Pyplot*
 - *Pickle*
+- *Numpy*
+- *Yaml*
+- *Argparse*
 
 ## Setup
 
 ### Installation
 
-To run this project you should create a **Conda Environment** (<https://www.anaconda.com/products/distribution>) to run it on, this will help with making sure it can run in it's default configuration. This is easily done with the included **Conda Environment** file.
-To do so, you should type the command:
+To run this project you should create a **Conda Environment** (<https://www.anaconda.com/products/distribution>) to run it on. This will help with making sure it can run in it's default configuration
+
+The **Conda Environment** file `configuration/iris_project_conda_env.yaml` makes it easy to create the environment to run this project.
+
+To create the environment, you should type the command in console:
 
 ```console
-conda env create -f configuration/irisproject_conda_env.yaml
+conda env create -f configuration/iris_project_conda_env.yaml
 ```
-
-The default name of the environment file is: `irisproject_conda_env.yaml`.
-
-When you run the command above it creates a **conda environment** which can be selected as the interpretor when you run one of the python files. It cointains all the libraries you would need to run the project.
 
 After having created the environment you also have to activate it:
 
@@ -69,7 +71,7 @@ You then delete the folder that matches the name of the Environment files config
 
 ### Running the project
 
-*The commands below were run in an Anaconda prompt but can be run in a terminal / console just fine.*
+**Note:** *The commands below were run in an Anaconda prompt but can be run in a terminal / console just fine.*
 
 #### Configuration
 
@@ -84,7 +86,7 @@ kfold_settings:
 
 #### Prediction
 
-This program is meant to predict on the saved training model from the Training Program, it has a specific format you should write your prediction in, a maximum and minimum number as well as a datatype.
+This program is meant to predict on the saved training model from the Training Program, the prediction is made using your user input as well as a list of corresponding features, minimum and maximum values to predict what **Iris flower** it would be according to the given information
 
 To run the Prediction program use the console command below:
 
@@ -92,7 +94,7 @@ To run the Prediction program use the console command below:
 python source/models/iris_classification_prediction.py
 ```
 
-Prediction is run in an iterative way, so that you only have to enter a number for the currently selected feature column
+**Note:** *Prediction is run in an iterative way, so that you only have to enter a number for the currently selected feature column*
 
 #### Training
 
@@ -104,7 +106,7 @@ To run the Training program use the console command below:
 python source/models/iris_classification_training.py
 ```
 
-There is also the option to enable graphing which will tell you how the **KFold** looks in terms of data distribution after the **KFold** and how the encoding looks on the **class label column**
+There is also the option to enable graphing which will tell you how the **KFold** looks in terms of data distribution after the **KFold** and how **class label column** is distributed among the **KFold splits.**
 
 To enable graphing on the training file, you would add --graphs to the end of the terminal command:
 
@@ -112,14 +114,16 @@ To enable graphing on the training file, you would add --graphs to the end of th
 python source/models/iris_classification_training.py --graphs
 ```
 
+**Note:** *The program also accepts g, gr, gra, grap and graph etc. Since it checks for anything contained in the word graphs*
+
 #### Data Analysis
 
-This program serves to show you information, correlations, maximum and minimum, distributions and so on via a profiling module.
+This program is made to show you information, correlations, maximum and minimum, distributions and so on via a profiling module.
 
 To start the program use the command:
 
 ```console
-python source/visualization/iris_classification_dataAnalysis.py
+python source/visualization/iris_classification_data_analysis.py
 ```
 
 Using **Data Analysis** tools i have been able to understand the dataset a lot better than i did before.
