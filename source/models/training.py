@@ -25,7 +25,6 @@ def arguments_handler():
 
     Returns:
         Namespace: Arguments that were passed through command line
-
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -50,10 +49,10 @@ def read_dataset_and_encode(
     Then it encodes the categorical label column into a numerical label column.
 
     Args:
-        label_name (str): _description_
-        dataset_name (str): _description_
-        column_names (list): _description_
-        features (dict): _description_
+        label_name (str): name of the label column
+        dataset_name (str): name of the dataset to read from
+        column_names (list): names of all the columns
+        features (dict): a dictionary with all the features and value ranges
 
     Returns:
         pandas.DataFrane: holds all the feature column records for each feature column
@@ -74,17 +73,6 @@ def read_dataset_and_encode(
     y = dataset_df[label_name]
 
     return X, y, label_encoder
-
-def create_model_and_kfold_split(criterion_setting,n_splits_setting,shuffle_setting,random_state_setting):
-    dtc_model = DecisionTreeClassifier(criterion=criterion_setting)
-
-    indices_kfold = StratifiedKFold(
-        n_splits=n_splits_setting,
-        shuffle=shuffle_setting,
-        random_state=random_state_setting
-        )
-        # Randomstate for uniform results
-    return dtc_model, indices_kfold
 
 def train_model(
     dtc_model: DecisionTreeClassifier,
@@ -107,7 +95,6 @@ def train_model(
         test_index (int) indices for the testing side of the kfold split
         X (pandas.DataFrame) The Feature columns of the dataset
         y (pandas.Series) The Label column of the dataset
-
     """
     i = 1
     X_train = X.iloc[train_index].values
@@ -165,7 +152,11 @@ def graphing(
     return occurance_df
 
 
-def save_file(model: DecisionTreeClassifier, encoder: preprocessing.LabelEncoder, model_and_encoder_name: str):
+def save_file(
+    model: DecisionTreeClassifier,
+    encoder: preprocessing.LabelEncoder,
+    model_and_encoder_name: str
+    ):
     """
     Save model and encoder mappings.
 
@@ -213,12 +204,14 @@ def main():
         features=cfg["features"]
         )
 
-    dtc_model, indices_kfold = create_model_and_kfold_split(
-                                  cfg["decisiontree_settings"]["criterion"],
-                                  cfg["kfold_settings"]["nr_splits"],
-                                  cfg["kfold_settings"]["shuffle"],
-                                  cfg["kfold_settings"]["random_state"]
-                                  )
+    dtc_model = DecisionTreeClassifier(criterion=cfg["decisiontree_settings"]["criterion"])
+
+    indices_kfold = StratifiedKFold(
+        n_splits=cfg["kfold_settings"]["nr_splits"],
+        shuffle=cfg["kfold_settings"]["shuffle"],
+        random_state=cfg["kfold_settings"]["random_state"]
+        )
+        # Randomstate for uniform results
 
     round_nr = 1
     for train_index, test_index in indices_kfold.split(X,y):
