@@ -12,8 +12,6 @@ features:
   
 label_name: 'class'
 
-cmd_arguments: "--graphs"
-
 decisiontree_settings:
  criterion: entropy
 
