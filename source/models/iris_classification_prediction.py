@@ -86,7 +86,13 @@ def main():
 
     user_input = value_check(cfg["features"])
 
-    prediction(user_input, model_encoder_dictionary)
+    prediction(user_input=user_input, model_encoder_dictionary=model_encoder_dictionary)
 
 if __name__ == "__main__":
     main()
+
+#TODO: path generation using PATHLIB instead of concentation pathlib.path(constant+end)
+#TODO: Even shorter file names iris_classification_prediction = prediction.py 
+#TODO: Update readme with new file names
+#TODO: def graphing(data_kfolded: StratifiedKFold, X: pd.DataFrame, y: pd.arrays.PandasArray) More functions like this
+#TODO: LAST. Formulate a plan for how to get project to MLOPS level. 1

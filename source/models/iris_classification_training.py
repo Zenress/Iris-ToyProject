@@ -16,25 +16,43 @@ DATASET_PATH = 'source/data/'
 CONFIG_PATH = 'configuration/config.yaml'
 
 
-def arguments_handler(cmd_arguments):
+def arguments_handler():
     """
     Handle commandline arguments
 
     Handles arguments that are passed through during the run command.
     Available arguments are: --graphs
 
-    Args:
-        cmd_arguments (str): string with the available command line argument
     Returns:
         Namespace: Arguments that were passed through command line
 
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument(cmd_arguments, help="Enables Graphing", action="store_true")
+    parser.add_argument(
+        "--graphs", #Does not allow explicit paremeter name=
+        help="Enables Graphing",
+        action="store_true"
+        )
     args = parser.parse_args()
     return args
 
-def train_model(dtc_model, data_kfolded, X, y):
+def read_dataset_and_encode(label_name, dataset_name, column_names, features):
+    label_encoder = preprocessing.LabelEncoder()
+
+    #Assigning custom column headers while reading the csv file
+    dataset_df = pd.read_csv(DATASET_PATH+dataset_name,
+                             header=None,
+                             names=column_names)
+
+    #Encoding the categorical column header to an int datatype
+    dataset_df[label_name] = label_encoder.fit_transform(dataset_df[label_name])
+
+    X = dataset_df[list(features)]
+    y = dataset_df[label_name]
+
+    return X, y, label_encoder
+
+def train_model(dtc_model, train_index, test_index, X, y):
     """
     Train DecisionTreeClassifier Model using Iris Dataset.
 
@@ -51,54 +69,52 @@ def train_model(dtc_model, data_kfolded, X, y):
 
     """
     i = 1
-    for train_index, test_index in data_kfolded.split(X,y):
-        X_train = X.iloc[train_index].values
-        X_test = X.iloc[test_index].values
-        y_train = y.iloc[train_index].values
-        y_test = y.iloc[test_index].values
+    X_train = X.iloc[train_index].values
+    X_test = X.iloc[test_index].values
+    y_train = y.iloc[train_index].values
+    y_test = y.iloc[test_index].values
 
-        dtc_model = dtc_model.fit(X_train,y_train)
-        print((f"Accuracy for fold nr. {i} on test set:"
-               f" {metrics.accuracy_score(y_test, dtc_model.predict(X_test))} - "
-               f"Double check: {dtc_model.score(X_test,y_test)}"))
+    dtc_model = dtc_model.fit(X_train,y_train)
+    print((f"Accuracy for fold nr. {i} on test set:"
+            f" {metrics.accuracy_score(y_test, dtc_model.predict(X_test))} - "
+            f"Double check: {dtc_model.score(X_test,y_test)}"))
 
-        i += 1
+    i += 1
 
-def graphing(data_kfolded, X, y):
+def graphing(train_index, test_index, occurance_df, round_nr, y):
     """
     Plot dataset and training progress to graph.
 
     Uses Matplotlib to plot a graph with how the dataset was distributed
     in the different KFold splits.
     Afterwards it tells you how it distributed the label records throughout the splits.
-
+    
     Args:
-        data_kfolded (sklearn.model_selection.StratifiedKFold) Iris Dataset data,
-            run through StratifiedKFold Cross validation
-        X (pandas.DataFrame) The Feature columns of the dataset
-        y (pandas.PandasArray) The Label column of the dataset
+        train_index (_type_): _description_
+        test_index (_type_): _description_
+        occurance_df (_type_): _description_
+        round_nr (_type_): _description_
+        y (_type_): _description_
 
+    Returns:
+        pandas.DataFrame: _description_
     """
-    occurance_df = []
-    round_nr = 1
-    for train_index, test_index in data_kfolded.split(X,y):
-        o_train = y.iloc[train_index].value_counts()
-        o_train.name = f"train {round_nr}"
-        o_test = y.iloc[test_index].value_counts()
-        o_test.name = f"test {round_nr}"
+    o_train = y.iloc[train_index].value_counts()
+    o_train.name = f"train {round_nr}"
+    o_test = y.iloc[test_index].value_counts()
+    o_test.name = f"test {round_nr}"
 
-        #Concatenate 2 pandas objects along a single dataframe axis
-        df = pd.concat([o_train, o_test], axis=1, sort=False)
-        df["|"] = "|"
-        occurance_df.append(df)
+    #Concatenate 2 pandas objects along a single dataframe axis
+    df = pd.concat([o_train, o_test], axis=1, sort=False)
+    df["|"] = "|"
+    occurance_df.append(df)
 
-        plt.scatter(x=y.iloc[train_index].index,y=y.iloc[train_index],label="train")
-        plt.scatter(x=y.iloc[test_index].index,y=y.iloc[test_index],label="test")
-        plt.legend()
-        plt.show()
-        round_nr+=1
+    plt.scatter(x=y.iloc[train_index].index,y=y.iloc[train_index],label="train")
+    plt.scatter(x=y.iloc[test_index].index,y=y.iloc[test_index],label="test")
+    plt.legend()
+    plt.show()
 
-    print(pd.concat(occurance_df,axis=1, sort= False))
+    return occurance_df
 
 def save_file(model, encoder, model_and_encoder_name):
     """
@@ -135,37 +151,54 @@ def main():
     the finished training and encoding is saved to a file as dictionaries.
 
     """
+    args = arguments_handler()
+
     with open(CONFIG_PATH, "r", encoding='UTF-8') as ymlfile:
         cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-    label_encoder = preprocessing.LabelEncoder()
-
-    #Assigning custom column headers while reading the csv file
-    dataset_df = pd.read_csv(DATASET_PATH+cfg["dataset_name"],
-                             header=None,
-                             names=cfg["column_names"])
-
-    #Encoding the categorical column header to an int datatype
-    dataset_df[cfg["label_name"]] = label_encoder.fit_transform(dataset_df[cfg["label_name"]])
-
-    X = dataset_df[list(cfg["features"])]
-    y = dataset_df[cfg["label_name"]]
+    X, y, label_encoder = read_dataset_and_encode(
+        label_name=cfg["label_name"],
+        dataset_name=cfg["dataset_name"],
+        column_names=cfg["column_names"],
+        features=cfg["features"]
+        )
 
     dtc_model = DecisionTreeClassifier(criterion=cfg["decisiontree_settings"]["criterion"])
 
-    data_kfolded = StratifiedKFold(n_splits=cfg["kfold_settings"]["nr_splits"],
-                                    shuffle=cfg["kfold_settings"]["shuffle"],
-                                    random_state=cfg["kfold_settings"]["random_state"])  
-                                    # Randomstate for uniform results
+    indices_kfold = StratifiedKFold(
+        n_splits=cfg["kfold_settings"]["nr_splits"],
+        shuffle=cfg["kfold_settings"]["shuffle"],
+        random_state=cfg["kfold_settings"]["random_state"]
+        )
+        # Randomstate for uniform results
 
-    args = arguments_handler(cfg['cmd_arguments'])
+    round_nr = 1
+    for train_index, test_index in indices_kfold.split(X,y):
+        train_model(
+            dtc_model=dtc_model,
+            train_index=train_index,
+            test_index=test_index,
+            X=X,
+            y=y
+            )
 
-    train_model(dtc_model, data_kfolded, X, y)
+        if args.graphs is True:
+            occurance_df = []
+            occurances_df = graphing(
+                train_index=train_index,
+                test_index=test_index,
+                occurance_df=occurance_df,
+                round_nr=round_nr,
+                y=y
+                )
+            round_nr+=1
+            print(pd.concat(occurances_df,axis=1, sort= False))
 
-    if args.graphs:
-        graphing(data_kfolded, X, y)
-
-    save_file(dtc_model, label_encoder, cfg["model_and_encoder_name"])
+    save_file(
+        model=dtc_model,
+        encoder=label_encoder,
+        model_and_encoder_name=cfg["model_and_encoder_name"]
+        )
 
 if __name__ == "__main__":
     main()

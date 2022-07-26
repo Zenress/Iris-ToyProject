@@ -48,10 +48,6 @@ def main():
                           names=cfg["column_names"])
     print(data_df.head(10))
 
-    label_encoder = preprocessing.LabelEncoder()
-
-    data_df[cfg["label_name"]] = label_encoder.fit_transform(data_df[cfg["label_name"]])
-
     file_report(data_df,cfg["report_settings"]["title"],cfg["iris_analysis_report_name"])
 
 if __name__ == "__main__":
