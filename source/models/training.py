@@ -1,6 +1,7 @@
 """
 Training file used for training the DecisionTreeClassifier.
 """
+from pathlib import Path
 import pickle
 import argparse
 import matplotlib.pyplot as plt
@@ -60,9 +61,10 @@ def read_dataset_and_encode(
         sklearn.preprocessing.LabelEncoder: Encoder used for encoding the label column
     """
     label_encoder = preprocessing.LabelEncoder()
+    dataset_full_path = Path(DATASET_PATH+dataset_name)
 
     #Assigning custom column headers while reading the csv file
-    dataset_df = pd.read_csv(DATASET_PATH+dataset_name,
+    dataset_df = pd.read_csv(dataset_full_path,
                              header=None,
                              names=column_names)
 
@@ -174,7 +176,8 @@ def save_file(
         "encoder_mappings": encoder.classes_,
     }
 
-    pickle.dump(dtc_model_and_encoder_mapping, open(MODEL_PATH+model_and_encoder_name, 'wb'))
+    model_and_encoder_full_path = Path(MODEL_PATH+model_and_encoder_name)
+    pickle.dump(dtc_model_and_encoder_mapping, open(model_and_encoder_full_path, 'wb'))
 
 
 def main():
@@ -194,8 +197,10 @@ def main():
     """
     args = arguments_handler()
 
-    with open(CONFIG_PATH, "r", encoding='UTF-8') as ymlfile:
+    config_full_path = Path(CONFIG_PATH)
+    with open(config_full_path, "r", encoding='UTF-8') as ymlfile:
         cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
+
 
     X, y, label_encoder = read_dataset_and_encode(
         label_name=cfg["label_name"],
