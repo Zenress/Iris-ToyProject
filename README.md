@@ -43,12 +43,12 @@ I've learned a lot about **Data analysis**, **Github repositories**, **library/d
 
 To run this project you should create a **Conda Environment** (<https://www.anaconda.com/products/distribution>) to run it on. This will help with making sure it can run in it's default configuration
 
-The **Conda Environment** file `configuration/iris_project_conda_env.yaml` makes it easy to create the environment to run this project.
+The **Conda Environment** file `configuration/conda_env.yaml` makes it easy to create the environment to run this project.
 
 To create the environment, you should type the command in console:
 
 ```console
-conda env create -f configuration/iris_project_conda_env.yaml
+conda env create -f configuration/conda_env.yaml
 ```
 
 After having created the environment you also have to activate it:
@@ -91,7 +91,7 @@ This program is meant to predict on the saved training model from the Training P
 To run the Prediction program use the console command below:
 
 ```console
-python source/models/iris_classification_prediction.py
+python source/models/prediction.py
 ```
 
 **Note:** *Prediction is run in an iterative way, so that you only have to enter a number for the currently selected feature column*
@@ -103,7 +103,7 @@ This program is gonna train the **DecisionTreeClassifier** Model with the **Iris
 To run the Training program use the console command below:
 
 ```console
-python source/models/iris_classification_training.py
+python source/models/training.py
 ```
 
 There is also the option to enable graphing which will tell you how the **KFold** looks in terms of data distribution after the **KFold** and how **class label column** is distributed among the **KFold splits.**
@@ -111,7 +111,7 @@ There is also the option to enable graphing which will tell you how the **KFold*
 To enable graphing on the training file, you would add --graphs to the end of the terminal command:
 
 ```console
-python source/models/iris_classification_training.py --graphs
+python source/models/training.py --graphs
 ```
 
 **Note:** *The program also accepts g, gr, gra, grap and graph etc. Since it checks for anything contained in the word graphs*
@@ -123,12 +123,12 @@ This program is made to show you information, correlations, maximum and minimum,
 To start the program use the command:
 
 ```console
-python source/visualization/iris_classification_data_analysis.py
+python source/visualization/data_analysis.py
 ```
 
 Using **Data Analysis** tools i have been able to understand the dataset a lot better than i did before.
 
-Pandas-profling gave me a detailed report about Correlation and Interactions, along with Maximum and Minimum ranges for each feature. (`reports/iris_analysis_report.html`)
+Pandas-profling gave me a detailed report about Correlation and Interactions, along with Maximum and Minimum ranges for each feature. (`reports/data_report.html`)
 
 ##### Dataset
 
@@ -151,21 +151,21 @@ The names we're derived from the documentation under **Attribute information** g
 
 - Correlation Matrix:
 
-![Correlation Matrix](docs/READMEIrisDataReportCorrelation.png)
+![Correlation Matrix](docs/correlation_matrix_example.png)
 
 - Interactions between Sepal Length and Petal Width:
 
-![Interactions between Sepal Length and Petal Width](docs/READMEIrisDataReportInteractionSepalLengthVSPetalWidth.png)
+![Interactions between Sepal Length and Petal Width](docs/interaction_sepal_length_vs_petal_width_example.png)
 
 - Interactions between Sepal Length and Sepal Width
 
-![Interactions between Sepal Length and Sepal Width](docs/READMEIrisDataReportInteractionSepalLengthSepalWidth.png)
+![Interactions between Sepal Length and Sepal Width](docs/interaction_sepal_length_vs_width_example.png)
 
 ## Credits
 
 - Credit to **UCI** for making the dataset widely accessible.
 - Credit to **Michele Stawowy** for **Quality Assurance and Guidance**
-- Credit to **Martin Riishøj Mathiasen** for the idea to **KFold the Dataset**
+- Credit to **Martin Riishøj Mathiasen** for the idea to **KFold crossvalidate**
 
 ## Sources
 
