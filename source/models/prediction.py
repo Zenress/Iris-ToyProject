@@ -74,9 +74,11 @@ def main():
     """
     Execute at runtime.
 
+    creating the config path using pathlib ->,
     initializing configuration file ->,
-    loading the pickled dictionary model_encoder_dictionary ->,
-    Running the value_check to make sure the prediction conditions are met ->,
+    creating the model and encoder path using pathlib ->,
+    unpickling the dictionary model_encoder_dictionary ->,
+    Running the value_check function to make sure the prediction conditions are met ->,
     Predicting using the value_check result and the encoder mappings.
     """
     config_full_path = Path(CONFIG_PATH)
@@ -93,5 +95,6 @@ def main():
 if __name__ == "__main__":
     main()
 
-#TODO: Update readme with new file names
+#TODO: Finish training.py main function docstring
 #TODO: LAST. Formulate a plan for how to get project to MLOPS level. 1
+

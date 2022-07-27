@@ -37,12 +37,11 @@ def main():
     """
     Execute on initialization.
 
-    Initiating the configuration file ->,
-    Reading the dataset -> printing the first 10 records of the dataset ->,
-    Initiating the labelencoder into a variable ->,
-    Encoding the categorical label column into a numerical label column ->,
-    Filing a report using the file_report function and saving that report to reports folder.
-
+    Creating configuration path via pathlib -> opening config.yaml file ->,
+    assigning the opened file to a cfg variable ->,
+    creating dataset path via pathlib ->,
+    reading the dataset and assigning it to a pandas.DataFrame ->,
+    running the file_report function.
     """
     config_full_path = Path(CONFIG_PATH)
     with open(config_full_path, "r", encoding='UTF-8') as ymlfile:
@@ -51,9 +50,11 @@ def main():
     dataset_full_path = Path(DATASET_PATH + cfg["dataset_name"])
 
     #Assigning custom column headers while reading the csv file
-    data_df = pd.read_csv(dataset_full_path,
-                          header=None,
-                          names=cfg["column_names"])
+    data_df = pd.read_csv(
+        dataset_full_path,
+        header=None,
+        names=cfg["column_names"]
+        )
     print(data_df.head(10))
 
     file_report(
