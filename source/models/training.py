@@ -184,16 +184,12 @@ def main():
     """
     Execute at code runtime.
 
-    Initiating configuration file ->,
-    Labelencoder is initialized -> Dataset is read ->,
-    Categorical Label Column is encoded to numerical type ->,
-    X is assigned with Features and Y is assigned with Label ->,
-    Model and KFold cross validation is initialized and run ->,
-    arguments_handler is run to check for cmd line arguments ->,
-    the model is trained with train_model ->,
-    graphing is run if correct arguments are present ->,
-    the finished training and encoding is saved to a file as dictionaries.
-
+    running arguments_handler to check for runtime arguments ->,
+    creating the config path using pathlib ->,
+    opening the config.yaml file using yaml.load ->,
+    running the read_dataset_and_encode function ->,
+    creating the DecisionTreeClassifier model ->,
+    creating indices for test and train split using stratifiedkfold ->,
     """
     args = arguments_handler()
 
