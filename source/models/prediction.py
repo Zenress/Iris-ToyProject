@@ -105,5 +105,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# TODO: LAST. Formulate a plan for how to get project to MLOPS level. 1
 
