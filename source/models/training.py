@@ -8,8 +8,7 @@ import matplotlib.pyplot as plt
 import yaml
 import pandas as pd
 from sklearn.model_selection import StratifiedKFold
-from sklearn import preprocessing
-from sklearn import metrics
+from sklearn import preprocessing, metrics
 from sklearn.tree import DecisionTreeClassifier
 
 MODEL_PATH = "models/"
@@ -17,7 +16,7 @@ DATASET_PATH = "source/data/"
 CONFIG_PATH = "configuration/config.yaml"
 
 
-def arguments_handler():
+def arguments_handler() -> argparse.Namespace:
     """
     Handle commandline arguments
 
@@ -41,7 +40,7 @@ def read_dataset_and_encode(
     label_name: str,
     dataset_name: str,
     column_names: list,
-    features: dict
+    features_keys: str
     ):
     """
     Read data from dataset and encode the label column
@@ -61,7 +60,7 @@ def read_dataset_and_encode(
         sklearn.preprocessing.LabelEncoder: Encoder used for encoding the label column
     """
     label_encoder = preprocessing.LabelEncoder()
-    dataset_full_path = Path(DATASET_PATH + dataset_name)
+    dataset_full_path = Path(DATASET_PATH, dataset_name)
 
     # Assigning custom column headers while reading the csv file
     dataset_df = pd.read_csv(dataset_full_path, header=None, names=column_names)
@@ -69,7 +68,7 @@ def read_dataset_and_encode(
     # Encoding the categorical column header to an int datatype
     dataset_df[label_name] = label_encoder.fit_transform(dataset_df[label_name])
 
-    X = dataset_df[list(features)]
+    X = dataset_df[features_keys]
     y = dataset_df[label_name]
 
     return X, y, label_encoder
@@ -81,7 +80,8 @@ def train_model(
     test_index: int,
     X: pd.DataFrame,
     y: pd.Series,
-    ):
+    fold_nr: int
+    ) -> None:
     """
     Train DecisionTreeClassifier Model using Iris Dataset.
 
@@ -97,7 +97,6 @@ def train_model(
         X (pandas.DataFrame) The Feature columns of the dataset
         y (pandas.Series) The Label column of the dataset
     """
-    i = 1
     X_train = X.iloc[train_index].values
     X_test = X.iloc[test_index].values
     y_train = y.iloc[train_index].values
@@ -106,13 +105,11 @@ def train_model(
     dtc_model = dtc_model.fit(X_train, y_train)
     print(
         (
-            f"Accuracy for fold nr. {i} on test set:"
+            f"Accuracy for fold nr. {fold_nr} on test set:"
             f" {metrics.accuracy_score(y_test, dtc_model.predict(X_test))} - "
             f"Double check: {dtc_model.score(X_test,y_test)}"
         )
     )
-
-    i += 1
 
 
 def graphing(
@@ -161,7 +158,7 @@ def save_file(
     model: DecisionTreeClassifier,
     encoder: preprocessing.LabelEncoder,
     model_and_encoder_name: str,
-    ):
+    ) -> None:
     """
     Save model and encoder mappings.
 
@@ -179,11 +176,11 @@ def save_file(
         "encoder_mappings": encoder.classes_,
     }
 
-    model_and_encoder_full_path = Path(MODEL_PATH + model_and_encoder_name)
+    model_and_encoder_full_path = Path(MODEL_PATH, model_and_encoder_name)
     pickle.dump(dtc_model_and_encoder_mapping, open(model_and_encoder_full_path, "wb"))
 
 
-def main():
+def main() -> None:
     """
     Execute at code runtime.
 
@@ -204,15 +201,14 @@ def main():
     """
     args = arguments_handler()
 
-    config_full_path = Path(CONFIG_PATH)
-    with open(config_full_path, "r", encoding="UTF-8") as ymlfile:
+    with open(CONFIG_PATH, "r", encoding="UTF-8") as ymlfile:
         cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
     X, y, label_encoder = read_dataset_and_encode(
         label_name=cfg["label_name"],
         dataset_name=cfg["dataset_name"],
         column_names=cfg["column_names"],
-        features=cfg["features"],
+        features_keys=cfg["features"].keys(),
     )
 
     dtc_model = DecisionTreeClassifier(
@@ -224,16 +220,15 @@ def main():
         shuffle=cfg["kfold_settings"]["shuffle"],
         random_state=cfg["kfold_settings"]["random_state"], # Randomstate for uniform results
     )
-   
 
-    round_nr = 1
-    for train_index, test_index in indices_kfold.split(X, y):
+    for count, (train_index, test_index) in enumerate(indices_kfold.split(X, y),1):
         train_model(
             dtc_model=dtc_model,
             train_index=train_index,
             test_index=test_index,
             X=X,
             y=y,
+            fold_nr=count
         )
 
         if args.graphs is True:
@@ -242,11 +237,11 @@ def main():
                 train_index=train_index,
                 test_index=test_index,
                 occurance_df=occurance_df,
-                round_nr=round_nr,
+                round_nr=count,
                 y=y,
             )
-            round_nr += 1
             print(pd.concat(occurances_df, axis=1, sort=False))
+
 
     save_file(
         model=dtc_model,
@@ -257,4 +252,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
