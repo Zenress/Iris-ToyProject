@@ -114,8 +114,6 @@ To enable graphing on the training file, you would add --graphs to the end of th
 python source/models/training.py --graphs
 ```
 
-**Note:** *The program also accepts g, gr, gra, grap and graph etc. Since it checks for anything contained in the word graphs*
-
 #### Data Analysis
 
 This program is made to show you information, correlations, maximum and minimum, distributions and so on via a profiling module.
