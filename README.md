@@ -108,7 +108,7 @@ python source/models/training.py
 
 There is also the option to enable graphing which will tell you how the **KFold** looks in terms of data distribution after the **KFold** and how **class label column** is distributed among the **KFold splits.**
 
-To enable graphing on the training file, you would add --graphs to the end of the terminal command:
+To enable graphing on the training file, you would add `--graphs` to the end of the terminal command:
 
 ```console
 python source/models/training.py --graphs
