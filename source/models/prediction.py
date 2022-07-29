@@ -30,10 +30,12 @@ def value_check(feature_dict: dict) -> list:
         feature_dict (dict) dictionary of the features,
             derived from the cfg dictionary object.
     """
-    edited_input = []
-    while len(edited_input) != len(feature_dict):
-        for count, (key, value) in enumerate(feature_dict.items(), 1):
-            print(f"Write the data you want to be predicted {count}/4:")
+    #TODO: Rethink entire method of looping through
+    features_input = []
+
+    for count, (key, value) in enumerate(feature_dict.items(), 1):
+        while len(features_input) != count:
+            print(f"Write the data you want to be predicted {count}/{len(feature_dict)}:")
             print(f"Input Feature: {key}")
             print("Datatype: Float")
             print(f"Highest Possible Number: {value['max']}")
@@ -41,25 +43,19 @@ def value_check(feature_dict: dict) -> list:
             user_input = input("Write here: ")
             print("____________________________________________")
 
-            try:
-                if (
-                    float(user_input) >= value["min"]
-                    and float(user_input) <= value["max"]
-                ):
-                    edited_input.append(user_input)
-                else:
-                    raise ValueError()
-
-            except ValueError:
+            if value['min'] <= float(user_input) <= value['max']:
+                features_input.append(user_input)
+            else:
                 print(
                     f"Please enter a Float that's between {value['min']} and {value['max']}"
                 )
-                break
-
-    return edited_input
 
 
-def prediction(user_input: list, model_encoder_dictionary: dict) -> None:
+    print(features_input)
+    return features_input
+
+
+def prediction(features_input: list, model_encoder_dictionary: dict) -> None:
     """
     Predict on Decistion Tree Model.
 
@@ -67,12 +63,12 @@ def prediction(user_input: list, model_encoder_dictionary: dict) -> None:
     accompanied by the corresponding encoder mapping to produce a readable prediction.
 
     Args:
-        user_input (list): user input edited into a 4 item list.
+        features (list): user input edited into a 4 item list.
         model_encoder_dictionary (dict): dictionary with the model and encoder objects.
     """
     class_value = model_encoder_dictionary["model"].predict(
-        np.reshape(user_input, (1, len(user_input)))
-    )
+        np.reshape(features_input, (1, len(features_input)))
+    )[0]
     print(
         class_value, "=", model_encoder_dictionary["encoder_mappings"][class_value]
     )
@@ -95,9 +91,9 @@ def main() -> None:
     model_and_encoder_full_path = Path(MODEL_PATH, cfg["model_and_encoder_name"])
     model_encoder_dictionary = pickle.load(open(model_and_encoder_full_path, "rb"))
 
-    user_input = value_check(feature_dict=cfg["features"])
+    features_input = value_check(feature_dict=cfg["features"])
 
-    prediction(user_input=user_input, model_encoder_dictionary=model_encoder_dictionary)
+    prediction(features_input=features_input, model_encoder_dictionary=model_encoder_dictionary)
 
 
 if __name__ == "__main__":
