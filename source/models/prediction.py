@@ -31,10 +31,9 @@ def value_check(feature_dict: dict) -> list:
             derived from the cfg dictionary object.
     """
     edited_input = []
-    round_nr = 0
     while len(edited_input) != len(feature_dict):
-        for key, value in feature_dict.items():
-            print(f"Write the data you want to be predicted {round_nr+1}/4:")
+        for count, (key, value) in enumerate(feature_dict.items(), 1):
+            print(f"Write the data you want to be predicted {count}/4:")
             print(f"Input Feature: {key}")
             print("Datatype: Float")
             print(f"Highest Possible Number: {value['max']}")
@@ -60,7 +59,7 @@ def value_check(feature_dict: dict) -> list:
     return edited_input
 
 
-def prediction(user_input: list, model_encoder_dictionary: dict):
+def prediction(user_input: list, model_encoder_dictionary: dict) -> None:
     """
     Predict on Decistion Tree Model.
 
@@ -72,14 +71,14 @@ def prediction(user_input: list, model_encoder_dictionary: dict):
         model_encoder_dictionary (dict): dictionary with the model and encoder objects.
     """
     class_value = model_encoder_dictionary["model"].predict(
-        np.reshape(user_input, (1, 4))
+        np.reshape(user_input, (1, len(user_input)))
     )
     print(
-        class_value, "=", model_encoder_dictionary["encoder_mappings"][class_value[0]]
+        class_value, "=", model_encoder_dictionary["encoder_mappings"][class_value]
     )
 
 
-def main():
+def main() -> None:
     """
     Execute at runtime.
 
@@ -90,11 +89,10 @@ def main():
     Running the value_check function to make sure the prediction conditions are met ->,
     Predicting using the value_check result and the encoder mappings.
     """
-    config_full_path = Path(CONFIG_PATH)
-    with open(config_full_path, "r", encoding="UTF-8") as ymlfile:
+    with open(CONFIG_PATH, "r", encoding="UTF-8") as ymlfile:
         cfg = yaml.load(ymlfile, Loader=yaml.FullLoader)
 
-    model_and_encoder_full_path = Path(MODEL_PATH + cfg["model_and_encoder_name"])
+    model_and_encoder_full_path = Path(MODEL_PATH, cfg["model_and_encoder_name"])
     model_encoder_dictionary = pickle.load(open(model_and_encoder_full_path, "rb"))
 
     user_input = value_check(feature_dict=cfg["features"])
@@ -104,5 +102,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
