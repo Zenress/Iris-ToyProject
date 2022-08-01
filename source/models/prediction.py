@@ -30,7 +30,6 @@ def value_check(feature_dict: dict) -> list:
         feature_dict (dict) dictionary of the features,
             derived from the cfg dictionary object.
     """
-    #TODO: Rethink entire method of looping through
     features_input = []
 
     for count, (key, value) in enumerate(feature_dict.items(), 1):
@@ -49,9 +48,8 @@ def value_check(feature_dict: dict) -> list:
                 print(
                     f"Please enter a Float that's between {value['min']} and {value['max']}"
                 )
-
-
-    print(features_input)
+                print()
+                print()
     return features_input
 
 
