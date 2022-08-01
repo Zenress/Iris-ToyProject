@@ -33,7 +33,7 @@ def value_check(feature_dict: dict) -> list:
     features_input = []
 
     for count, (key, value) in enumerate(feature_dict.items(), 1):
-        while len(features_input) != count:
+        while True:
             print(f"Write the data you want to be predicted {count}/{len(feature_dict)}:")
             print(f"Input Feature: {key}")
             print("Datatype: Float")
@@ -44,6 +44,7 @@ def value_check(feature_dict: dict) -> list:
 
             if value['min'] <= float(user_input) <= value['max']:
                 features_input.append(user_input)
+                break
             else:
                 print(
                     f"Please enter a Float that's between {value['min']} and {value['max']}"
